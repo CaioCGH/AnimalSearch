@@ -1,0 +1,22 @@
+FROM node:alpine
+
+WORKDIR /usr/src/app/api
+
+COPY package*.json ./
+
+RUN npm install
+
+#RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+#RUN python3 -m ensurepip
+#RUN pip3 install --no-cache --upgrade pip setuptools
+
+#RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-340.0.0-linux-x86_64.tar.gz
+#RUN tar -xf google-cloud-sdk-340.0.0-linux-x86_64.tar.gz
+#RUN ./google-cloud-sdk/install.sh -q
+#RUN ./google-cloud-sdk/bin/gcloud init
+
+ENV GOOGLE_APPLICATION_CREDENTIALS=/usr/src/app/api/credentials.json
+
+EXPOSE 3080
+
+CMD ["npm", "run", "dev"]
