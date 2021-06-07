@@ -20,9 +20,6 @@ import Dashboard from './components/Dashboard.vue'
 export default {
   name: 'App',
   components: {
-    // Header,
-    // SearchAnimal,
-    // GenreSpeciesBoard,
     Dashboard
   }
 }

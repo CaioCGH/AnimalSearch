@@ -31,7 +31,7 @@
 
 <script>
 
-import { searchAnimal } from '../services/UserService'
+import { searchAnimal, wikiavesSearch } from '../services/UserService'
 import AnimalRows from './AnimalRows.vue'
 
 
@@ -59,6 +59,7 @@ export default {
             }
             searchAnimal(payload).then(
                 (value) => {
+                    console.log("fdsnfdsjffks")
                     console.log(value);
                     this.animalRows = value;
                     this.result = true;
@@ -77,7 +78,21 @@ export default {
           this.genus = "";
           this.species = "";
           this.commonName = "";
-      }
+      },
+      wikiavesSearch(){
+            console.log(this.wikiavesCode);
+            console.log("in wikiavessearch");
+            const payload = {
+                wikiavesCode: this.commonName
+            }
+            wikiavesSearch(payload).then(
+                (value) => {
+                    console.log("hdsfsds");
+                    console.log(value);
+                    this.animalData = value;
+                    this.result = true;
+                })
+        }
   }
 }
 </script>

@@ -5,6 +5,7 @@
           <div class="row">
             <div class="col-md-8">
                 <SearchAnimal @searchAnimal="animalSearch($event)" />
+                <WikiavesSearch @wikiavesSearch="wikiavesSearch($event)" />
             </div>
           </div>
     </div>
@@ -14,13 +15,15 @@
 <script>
 import Header from './Header.vue'
 import SearchAnimal from './SearchAnimal.vue'
-import { getAllUsers, searchAnimal } from '../services/UserService'
+import WikiavesSearch from './WikiavesSearch.vue'
+import { getAllUsers, searchAnimal, wikiavesSearch } from '../services/UserService'
 
 export default {
   name: 'Dashboard',
   components: {
     Header,
-    SearchAnimal
+    SearchAnimal,
+    WikiavesSearch
   },
   data() {
       return {
@@ -41,7 +44,12 @@ export default {
       console.log(data);
       searchAnimal(data).then(response => {
         console.log(response);
-        this.getAllUsers();
+      });
+    },
+    wikiavesSearch(data) {
+      console.log(data);
+      wikiavesSearch(data).then(response => {
+        console.log(response);
       });
     },
   }

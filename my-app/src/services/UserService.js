@@ -18,6 +18,15 @@ export async function searchAnimal(data) {
     return await response.json();
 }
 
+export async function wikiavesSearch(data) {
+    const response = await fetch(`/api/wikiaves-search`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({searchCriteria: data}),
+      })
+    return await response.json();
+}
+
 export async function createUser(data) {
     console.log("criando usuário");
     const response = await fetch(`/api/user`, {

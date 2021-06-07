@@ -1,19 +1,21 @@
 const express = require('express');
 const path = require('path');
 const randomId = require('random-id');
-const app = express(),
-bodyParser = require("body-parser");
+const app = express();
+const bodyParser = require("body-parser");
 const fs = require('fs');
 const searchTools = require('./src/searchTools');
 const animalRow = require('./src/animalRow');
-port = 3080;
+const scraper = require('./src/scraper');
+
+port = 3000;
 
 const { google } = require("googleapis");
 var googleAuth = require('google-auth-library');
 
 
-// place holder for the data
-const users = [];
+app.use(bodyParser.json());
+
 
 app.get('/api/genero-especie', async(req,res) => {
     console.log('genero-especie called!!!!!!!');
@@ -33,13 +35,6 @@ app.get('/api/genero-especie', async(req,res) => {
   res.json(getRows);
 });
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '../my-app/dist')));
-
-app.get('/api/users', (req, res) => {
-  console.log('api/users called__@@@__')
-  res.json(users);
-});
 
 app.post('/api/user', (req, res) => {
   const user = req.body.user;
@@ -51,7 +46,6 @@ app.post('/api/user', (req, res) => {
 
 
 app.post('/api/search-animal', async(req, res) => {
-  console.log("hahahaha");
   const auth = new google.auth.GoogleAuth({
     keyfile: "credentials.json",
     scopes: 'https://www.googleapis.com/auth/spreadsheets'
@@ -73,54 +67,24 @@ app.post('/api/search-animal', async(req, res) => {
   
   const headerRow = animalRow.createHeaderRow(rows);
   var animalRows = animalRow.createAnimalRows(headerRow, matchingRows);
-  // console.log(animalRows);
   res.json(animalRows); 
 });
 
-
-
-
-app.get('/', async(req,res) => {
-  // const auth = new google.auth.GoogleAuth({
-  const auth = new google.auth.GoogleAuth({
-    keyfile: "credentials.json",
-    scopes: 'https://www.googleapis.com/auth/spreadsheets'
+app.post('/api/wikiaves-search', async(req, res) => {
+  const searchCriteria = req.body.searchCriteria;
+  scraper.scrapeWikiavesName(searchCriteria.wikiavesCode)
+  .then((data) => {
+    console.log("data");
+    console.log(data);
+    res.json(data); 
   });
-console.log('aaaa');
-
-  //create cliente instantce for auth
-  // const client = await auth.getClient();
-  const client = await auth.getClient();
-
-  //instance for googlesheets api
-  const googleSheets = google.sheets({ version: "v4", auth: client });
-  const spreadsheetId = "1yVcNxCu3uxD2dqmvLxkbZhi-DETwPW3ilzwpPzYaUZ4";
-  //get metadata about spreadsheet
-  const metaData = await googleSheets.spreadsheets.get({
-    auth,
-    spreadsheetId
-  });
-
-  const getRows = await googleSheets.spreadsheets.values.get({
-    auth, spreadsheetId,
-    range: "Banco de Dados_Geral!A:A",
-  });
-
-  await googleSheets.spreadsheets.values.append({
-    auth, spreadsheetId, range: "Errata!A:B",
-    valueInputOption: "USER_ENTERED",
-    resource: {
-      values:[
-        ["make a tutorial", "test123"]
-      ]
-    }
-  })
-
-
-
-  res.send(getRows);
-  // res.sendFile(path.join(__dirname, '../my-app/build/index.html'));
 });
-app.listen(port, () => {
-    console.log(`Server listening on the port::${port}`);
+
+app.get("/", function (req, res) {
+  res.send("<h1>Hello World!</h1>")
+})
+
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server listening on the port::${process.env.PORT} or 3000`);
 });
