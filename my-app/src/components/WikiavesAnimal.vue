@@ -10,6 +10,7 @@
                         <td >{{ value }}</td>
                     </tr>
                 </div>
+                <a v-bind:href="animalData.url">Fonte</a>
         </div>
     </div>
 </template>
