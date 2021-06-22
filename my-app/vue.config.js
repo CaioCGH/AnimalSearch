@@ -2,7 +2,7 @@ module.exports = {
     devServer: {
       proxy: {
         '^/api': {
-          target: 'http://node-api:3000',
+          target: 'https://anmal-search.herokuapp.com',
           changeOrigin: true
         },
       }
