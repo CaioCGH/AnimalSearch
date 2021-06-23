@@ -5,6 +5,7 @@ module.exports = {
           target: 'http://node-api:3000',
           changeOrigin: true
         },
-      }
+      },
+	disableHostCheck: true
     }
   }

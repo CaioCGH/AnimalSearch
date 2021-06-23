@@ -21,7 +21,7 @@ app.get('/api/genero-especie', async(req,res) => {
     console.log('genero-especie called!!!!!!!');
 
   const auth = new google.auth.GoogleAuth({
-    keyfile: "credentials.json",
+    // keyfile: "credentials.json",
     scopes: 'https://www.googleapis.com/auth/spreadsheets'
   });
   const client = await auth.getClient();
@@ -47,7 +47,7 @@ app.post('/api/user', (req, res) => {
 
 app.post('/api/search-animal', async(req, res) => {
   const auth = new google.auth.GoogleAuth({
-    keyfile: "credentials.json",
+    // keyfile: "credentials.json",
     scopes: 'https://www.googleapis.com/auth/spreadsheets'
   });
   const client = await auth.getClient();
