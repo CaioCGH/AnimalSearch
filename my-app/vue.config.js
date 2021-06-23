@@ -1,5 +1,6 @@
 module.exports = {
     devServer: {
-      proxy: 'https://anmal-search.herokuapp.com'
+      proxy: 'https://anmal-search.herokuapp.com',
+        changeOrigin: true
     }
   }
