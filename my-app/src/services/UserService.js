@@ -14,7 +14,7 @@ export async function searchAnimal(data) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-        'Accept': 'application/json'},
+            'Accept': 'application/json'},
         body: JSON.stringify({searchCriteria: data})
       })
     return await response.json();
@@ -23,7 +23,9 @@ export async function searchAnimal(data) {
 export async function wikiavesSearch(data) {
     const response = await fetch(`/api/wikiaves-search`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'},
         body: JSON.stringify({searchCriteria: data}),
       })
     return await response.json();
