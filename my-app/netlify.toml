@@ -6,3 +6,11 @@
   force = true # COMMENT: ensure that we always redirect
   headers = {X-From = "Netlify"}
   signed = "API_SIGNATURE_TOKEN"
+## This rule redirects to an external API, signing requests with a secret
+[[redirects]]
+  from = "/api/wikiaves-search"
+  to = "http://anmal-search.herokuapp.com/api/wikiaves-search"
+  status = 200
+  force = true # COMMENT: ensure that we always redirect
+  headers = {X-From = "Netlify"}
+  signed = "API_SIGNATURE_TOKEN"
