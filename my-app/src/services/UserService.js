@@ -12,7 +12,9 @@ export async function getGenreSpecies() {
 export async function searchAnimal(data) {
     const response = await fetch(`/api/search-animal`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+            'Content-Type': 'application/json',
+        'Accept': 'application/json'},
         body: JSON.stringify({searchCriteria: data})
       })
     return await response.json();
