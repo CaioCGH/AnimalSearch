@@ -21,6 +21,7 @@ export async function searchAnimal(data) {
 }
 
 export async function wikiavesSearch(data) {
+    console.log(JSON.stringify({searchCriteria: data}));
     const response = await fetch(`/api/wikiaves-search`, {
         method: 'POST',
         headers: {

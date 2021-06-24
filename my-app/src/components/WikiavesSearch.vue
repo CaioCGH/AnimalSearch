@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       wikiavesCode: '',
-      animalData : {},
+      animalData : {}, 
       result: false
     }
   },

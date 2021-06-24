@@ -37,11 +37,13 @@ app.get('/api/genero-especie', async(req,res) => {
 
 
 app.post('/api/user', (req, res) => {
-  const user = req.body.user;
-  user.id = randomId(10);
-  console.log('Adding user:::::', user);
-  users.push(user);
-  res.json("user addedd");
+  const searchCriteria = req.body.searchCriteria;
+  scraper.scrapeWikiavesName(searchCriteria.wikiavesCode)
+  .then((data) => {
+    console.log("data");
+    console.log(data);
+    res.json(data); 
+  });
 });
 
 
