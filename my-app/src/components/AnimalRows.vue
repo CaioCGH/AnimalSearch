@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <h2>Resultados</h2>
+        <h2 v-if="animalRows.length === 1"> {{ animalRows.length }} resultado</h2>
+        <h2 v-else >{{ animalRows.length }} resultados</h2>
         <div v-for="animalRow in animalRows" :key="animalRow.id"> 
             <div class="card border-primary mb-3" >
                 <div class="card-body text-primary">
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-
+console.log("hahahahaa")
     export default {
         name: 'AnimalRows',
         props: ['animalRows']

@@ -65,6 +65,7 @@ app.post('/api/search-animal', async(req, res) => {
   const searchCriteria = req.body.searchCriteria;
   console.log(searchCriteria);
   const matchingRows = searchTools.find(rows, req.body.searchCriteria);
+  console.log(matchingRows);
 
   
   const headerRow = animalRow.createHeaderRow(rows);

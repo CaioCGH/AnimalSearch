@@ -18,11 +18,24 @@
                         <input type="text" class="form-control" v-model="commonName" name="commom_name" id="commom_name" placeholder="Nome comum" />
                     </div>
                 </div>
-                <button type="button" @click='searchAnimal()' class="btn btn-danger">Pesquisar</button>
+                
+                <button type="button" @click='searchAnimal()' class="btn btn-danger">
+                    <span v-show="!loading">Pesquisar</span>
+                    <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
+                    <span v-show="loading">Aguarde, carregando</span>
+                </button>
             </form>
         </div>
         <div v-if="animalRows.length > 0">
             <AnimalRows :animalRows="animalRows" />
+        </div>
+        <div v-if="animalRows.length == 0 && result">
+            
+            <div class="card border-primary mb-3 mt-3" >
+                <div class="card-body text-primary">
+                      Nenhum resultado encontrado para a busca
+                </div>
+            </div>
         </div>
 
     </div>
@@ -32,13 +45,15 @@
 <script>
 
 import { searchAnimal, wikiavesSearch } from '../services/UserService'
+import { BSpinner } from 'bootstrap-vue'
 import AnimalRows from './AnimalRows.vue'
 
 
 export default {
   name: 'SearchAnimal',
   components:{
-      AnimalRows
+      AnimalRows,
+      BSpinner
   },
   data() {
     return {
@@ -46,33 +61,25 @@ export default {
       species: '',
       commonName: '',
       animalRows : [],
-      result: false
+      result: false,
+      loading: false
     }
   },
     methods: {
         searchAnimal(){
-            console.log(this.commonName)
+            this.loading = true;
+            
             const payload = {
-                genus: this.genus,
-                species: this.species,
-                commonName: this.commonName
+                genus: this.genus.trim(),
+                species: this.species.trim(),
+                commonName: this.commonName.trim()
             }
             searchAnimal(payload).then(
                 (value) => {
-                    console.log("fdsnfdsjffks")
-                    console.log(value);
                     this.animalRows = value;
                     this.result = true;
+                    this.loading = false;
                 })
-      },
-      createUser() {
-          const payload = {
-              firstName: this.firstName,
-              lastName: this.lastName,
-              email: this.email
-          }
-          this.$emit('createUser', payload)
-          this.clearForm();
       },
       clearForm() {
           this.genus = "";

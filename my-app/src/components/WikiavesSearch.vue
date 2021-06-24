@@ -16,13 +16,23 @@
                         <input type="text" class="form-control" v-model="wikiavesCode" name="wikiavesCode" id="wikiavesCode" aria-describedby="emailHelp" placeholder="wikiavesCode" />
                     </div>
                 </div>
-                <button type="button" @click='wikiavesSearch()' class="btn btn-danger">Pesquisar</button>
+                <button type="button" @click='wikiavesSearch()' class="btn btn-danger">
+                     <span v-show="!loading">Pesquisar</span>
+                    <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
+                    <span v-show="loading">Aguarde, carregando</span>
+                </button>
             </form>
         </div>
-        <div v-if="result">
+        <div v-if="hasSearched && animalData.mainImg !== undefined">
             <WikiavesAnimal :animalData="animalData" />
         </div>
-
+        <div v-if="hasSearched && animalData.mainImg === undefined">
+            <div class="card border-primary mb-3 mt-3" >
+                <div class="card-body text-primary">
+                      Nenhum resultado encontrado para a busca
+                </div>
+            </div>
+        </div>
     </div>
     </div>
 </template>
@@ -30,34 +40,38 @@
 <script>
 
 import { wikiavesSearch } from '../services/UserService'
+import { BSpinner } from 'bootstrap-vue'
+
 import WikiavesAnimal from './WikiavesAnimal.vue'
 
 
 export default {
   name: 'WikiavesSearch',
   components:{
-      WikiavesAnimal
+      WikiavesAnimal,
+      BSpinner
   },
   data() {
     return {
       wikiavesCode: '',
       animalData : {}, 
-      result: false
+      hasSearched: false,
+      loading: false
     }
   },
     methods: {
         wikiavesSearch(){
+            this.loading = true;
             console.log(this.wikiavesCode);
-            console.log("in wikiavessearch");
             const payload = {
                 wikiavesCode: this.wikiavesCode
             }
             wikiavesSearch(payload).then(
                 (value) => {
-                    console.log("hdsfsds");
                     console.log(value);
                     this.animalData = value;
-                    this.result = true;
+                    this.hasSearched = true;
+                    this.loading = false;
                 })
         }
     }
