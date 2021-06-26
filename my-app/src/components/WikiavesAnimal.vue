@@ -1,13 +1,12 @@
 <template>
     <div class="container">
-        <h2>Resultados</h2>
             <div class="card border-primary mb-3" >
                 <img v-bind:src="animalData.mainImg" />
                 <img v-bind:src="'https://www.wikiaves.com.br' + animalData.ocurrencesMap" />
                 <div class="card-body text-primary">
                     <tr v-for="(value, key) in animalData.taxonomy" :key="key">
                         <td>{{ key }}</td>
-                        <td >{{ value }}</td>
+                        <td>{{ value}}</td>
                     </tr>
                 </div>
                 <a v-bind:href="animalData.url">Fonte</a>

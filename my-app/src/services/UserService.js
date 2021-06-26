@@ -32,6 +32,19 @@ export async function wikiavesSearch(data) {
     return await response.json();
 }
 
+export async function wikiavesSearchWid(data) {
+    console.log(JSON.stringify("searchCriteria: data"));
+    console.log(JSON.stringify({searchCriteria: data}));
+    const response = await fetch(`/api/wikiaves-search-wid`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'},
+        body: JSON.stringify({searchCriteria: data}),
+      })
+    return await response.json();
+}
+
 export async function createUser(data) {
     console.log("criando usuário");
     const response = await fetch(`/api/user`, {
