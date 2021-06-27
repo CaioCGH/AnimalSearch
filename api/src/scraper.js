@@ -1,8 +1,7 @@
-var express = require('express');
 var request = require('request');
 var cheerio = require('cheerio');
 
-exports.scrapeWikiavesName = (wikiavesCode) =>{
+exports.scrapeWikiavesSearchWid = (wikiavesCode) =>{
     const url = "https://www.wikiaves.com.br/wiki/" + wikiavesCode;
     console.log(url);
     return new Promise((resolve, reject)=>{
@@ -19,9 +18,6 @@ exports.scrapeWikiavesName = (wikiavesCode) =>{
                 table.push($(element).text());
               });;
             for(var i = 0; i < table.length - 1; i=i+2){
-                // if(table[i] === ''){
-                //     $taxonomy[table[i]] = table[i+1];    
-                // }
                 $taxonomy[table[i]] = table[i+1];
             }
 
@@ -36,6 +32,20 @@ exports.scrapeWikiavesName = (wikiavesCode) =>{
                 ocurrencesMap: $ocurrencesMap,
             }
             resolve(result);
+        })
+    })
+}
+
+exports.scrapeWikiavesSearch = (searchText) =>{
+    const url = "https://www.wikiaves.com.br/getTaxonsJSON.php?term=" + searchText;
+    console.log(url);
+    return new Promise((resolve, reject)=>{
+        request(url, (err, resp, data) =>{
+            if(err){
+                reject(error);
+            }
+            jsonData = JSON.parse(data);
+            resolve(jsonData);
         })
     })
 }

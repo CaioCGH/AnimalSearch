@@ -1,12 +1,10 @@
 const express = require('express');
-const path = require('path');
-const randomId = require('random-id');
-const app = express();
 const bodyParser = require("body-parser");
-const fs = require('fs');
+const app = express();
 const searchTools = require('./src/searchTools');
 const animalRow = require('./src/animalRow');
 const scraper = require('./src/scraper');
+const ebird = require('./src/ebird');
 
 port = 3000;
 
@@ -75,16 +73,33 @@ app.post('/api/search-animal', async(req, res) => {
 
 app.post('/api/wikiaves-search', async(req, res) => {
   const searchCriteria = req.body.searchCriteria;
-  scraper.scrapeWikiavesName(searchCriteria.wikiavesCode)
+  console.log(searchCriteria)
+  scraper.scrapeWikiavesSearch(searchCriteria.wikiavesSearchTerm)
   .then((data) => {
-    console.log("data");
-    console.log(data);
+    res.json(data); 
+  });
+});
+
+app.post('/api/wikiaves-search-wid', async(req, res) => {
+  const searchCriteria = req.body.searchCriteria;
+  console.log(searchCriteria)
+  scraper.scrapeWikiavesSearchWid(searchCriteria.wid)
+  .then((data) => {
+    res.json(data); 
+  });
+});
+
+app.post('/api/ebird-search', async(req, res) => {
+  const searchCriteria = req.body.searchCriteria;
+  console.log(searchCriteria)
+  ebird.ebirdSearch(searchCriteria.scientificName)
+  .then((data) => {
     res.json(data); 
   });
 });
 
 app.get("/", function (req, res) {
-  res.send("<h1>Hello World!</h1>")
+  res.send("<h1>Hello World! in FaunaSP</h1>")
 })
 
 
