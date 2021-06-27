@@ -6,7 +6,7 @@
 
 [[redirects]]
   from = "/api/wikiaves-search-wid"
-  to = "http://anmal-search.herokuapp.com/api/search-animal"
+  to = "http://anmal-search.herokuapp.com/api/wikiaves-search-wid"
   status = 200
   force = true
 
@@ -18,6 +18,6 @@
 
 [[redirects]]
   from = "/api/ebird-search"
-  to = "http://anmal-search.herokuapp.com/api/search-animal"
+  to = "http://anmal-search.herokuapp.com/api/ebird-search"
   status = 200
   force = true
