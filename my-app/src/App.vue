@@ -10,10 +10,6 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-// import Header from './components/Header.vue'
-// import SearchAnimal from './components/SearchAnimal.vue'
-// import GenreSpeciesBoard from './components/GenreSpeciesBoard.vue'
 import Dashboard from './components/Dashboard.vue'
 
 
