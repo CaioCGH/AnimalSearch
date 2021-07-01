@@ -8,7 +8,7 @@
             <b-tab title="Banco geral" active><SearchAnimal  /></b-tab>
             <b-tab title="Wikiaves"><WikiavesSearch  /></b-tab>
             <b-tab title="Ebird"><EbirdSearch /></b-tab>
-            <b-tab title="I Naturalist"><WikiavesSearch  /></b-tab>
+            <b-tab title="INaturalist"><InaturalistSearch  /></b-tab>
           </b-tabs>
         </div>
       </div>
@@ -21,6 +21,7 @@ import Header from './Header.vue'
 import SearchAnimal from './SearchAnimal.vue'
 import WikiavesSearch from './WikiavesSearch.vue'
 import EbirdSearch from './EbirdSearch.vue'
+import InaturalistSearch from './InaturalistSearch.vue'
 import { BTabs } from 'bootstrap-vue'
 import { BTab } from 'bootstrap-vue'
 
@@ -30,7 +31,7 @@ export default {
   components: {
     Header,
     SearchAnimal,
-    WikiavesSearch, EbirdSearch, BTabs, BTab
+    WikiavesSearch, EbirdSearch, InaturalistSearch, BTabs, BTab
   },
   data() {
       return {

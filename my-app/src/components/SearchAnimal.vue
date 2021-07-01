@@ -3,6 +3,7 @@
     <div class="row">
         <div class="col-md-7 mrgnbtm">
         <h2>Buscar espécie</h2>
+        <p>Busca exata</p>
             <form>
                 <div class="row">
                     <div class="form-group col-md-9">

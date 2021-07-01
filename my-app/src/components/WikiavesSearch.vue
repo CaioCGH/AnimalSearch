@@ -1,5 +1,13 @@
 <template>
   <div class="container">
+      <h2>Procurar no Wikiaves</h2>
+      <p>Buscar por nome científico ou comum. Tente:</p>
+      <ul>
+          <li>quero-quero</li>
+          <li>papagaio</li>
+          <li>Inezia caudata</li>
+          <li>Ortalis canicollis</li>
+    </ul>
     <div class="row">
         <div class="col-md-7 mrgnbtm">
             <form>

@@ -18,15 +18,17 @@ fs.readFile(__dirname + "/../resources/ebirdtaxonomy.csv", (error, data) => {
 exports.ebirdSearch = (searchText) =>{
 
     const speciesCode = findEbirdCodeByScientificName(searchText);
-    const regionCode = "BR"
+    const regionCode = "BR-SP"
     const ebirdapitoken = process.env.EBIRD_TOKEN;
     console.log(ebirdapitoken);
 
-    console.log(`https://api.ebird.org/v2/data/obs/${regionCode}/recent/${speciesCode}`);
+    const url = `https://api.ebird.org/v2/data/obs/${regionCode}/recent/${speciesCode}?sppLocale=pt-br`;
+
+    console.log(url);
     var request = require('request');
     var options = {
         'method': 'GET',
-        'url': `https://api.ebird.org/v2/data/obs/${regionCode}/recent/${speciesCode}`,
+        'url': url,
         'headers': {
           'X-eBirdApiToken': `${ebirdapitoken}`
         }

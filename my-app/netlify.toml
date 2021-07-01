@@ -21,3 +21,9 @@
   to = "http://anmal-search.herokuapp.com/api/ebird-search"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/api/inaturalist-search"
+  to = "http://anmal-search.herokuapp.com/api/inaturalist-search"
+  status = 200
+  force = true

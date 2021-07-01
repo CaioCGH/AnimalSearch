@@ -11,7 +11,6 @@
                     </tr>
                 </div>
             </div>
-                <!-- <a v-bind:href="animalData.url">Fonte</a> -->
         </div>
     </div>
 </template>

@@ -5,6 +5,7 @@ const searchTools = require('./src/searchTools');
 const animalRow = require('./src/animalRow');
 const scraper = require('./src/scraper');
 const ebird = require('./src/ebird');
+const inaturalist = require('./src/inaturalist');
 
 port = 3000;
 
@@ -93,6 +94,15 @@ app.post('/api/ebird-search', async(req, res) => {
   const searchCriteria = req.body.searchCriteria;
   console.log(searchCriteria)
   ebird.ebirdSearch(searchCriteria.scientificName)
+  .then((data) => {
+    res.json(data); 
+  });
+});
+
+app.post('/api/inaturalist-search', async(req, res) => {
+  const searchCriteria = req.body.searchCriteria;
+  console.log(searchCriteria)
+  inaturalist.inaturalistSearch(searchCriteria.scientificName)
   .then((data) => {
     res.json(data); 
   });
