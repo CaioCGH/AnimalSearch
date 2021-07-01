@@ -4,6 +4,14 @@
         <form>
             <div class="row">
                 <div class="form-group col-md-9">
+                    <b-form-checkbox
+                        id="checkbox-1"
+                        v-model="status"
+                        name="checkbox-1"
+                        value="only_names"
+                        unchecked-value="not_only_names">
+                            Apenas lista de espécies
+                    </b-form-checkbox>
                     <label >Nome: </label>
                     
                     <select v-model="chosenLocality" @change="update">
@@ -14,14 +22,25 @@
                 </div>
             </div>
             
-            <button type="button" @click='bioOnlineSearchAnimalsInLocality()' class="btn btn-danger">
+            <button type="button" @click='bioOnlineSearchAnimalsInLocality()' class="btn btn-danger mb-4">
                 <span v-show="!loading">Pesquisar</span>
                 <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                 <span v-show="loading">Aguarde, carregando</span>
             </button>
         </form>
-        <div v-if="animalRows.length > 0">
+        <div v-if="status === 'not_only_names' && animalRows.length > 0">
             <AnimalRows :animalRows="animalRows" :selected="selected"/>
+        </div>
+        <div v-if="status === 'only_names' && animalRows.length > 0">
+                        <div class="card border-primary" >
+                            <div class="card-body">
+
+                        <tr v-for="animalRow in animalRows" :key="animalRow.id"> 
+                            <td class="mb=8">{{animalRow['Gênero']}} {{animalRow['Espécie']}}</td>
+                            <td>{{animalRow['Nome Comum']}}</td>
+                        </tr>
+        </div>
+        </div>
         </div>
         <div v-if="animalRows.length == 0 && result">
             <div class="card border-primary mb-3 mt-3" >
@@ -55,7 +74,8 @@ import AnimalRows from './AnimalRows.vue'
       chosenLocality: null,
       animalRows: [],
       result: false,
-      loading: false
+      loading: false,
+      status: 'not_only_names'
     }
   },
   created() {
