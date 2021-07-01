@@ -39,3 +39,9 @@
   to = "http://anmal-search.herokuapp.com/api/bio-online-search-species-in-locality"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/api/get-genera-species-commonnames"
+  to = "http://anmal-search.herokuapp.com/api/get-genera-species-commonnames"
+  status = 200
+  force = true

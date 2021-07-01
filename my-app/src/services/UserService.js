@@ -75,6 +75,14 @@ export async function getBioOnlineLocalities() {
     return await response.json();
 }
 
+export async function getGeneraSpeciesCommonName() {
+    const response = await fetch(`/api/get-genera-species-commonnames`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
+      })
+    return await response.json();
+}
+
 export async function bioOnlineSearchAnimalsInLocality(payload) {
     const url = `/api/bio-online-search-species-in-locality?locality=${payload.locality}`;
     console.log(url);

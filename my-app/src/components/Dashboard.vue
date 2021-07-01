@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-md-8">
           <b-tabs  content-class="mt-4">
-            <b-tab title="Banco geral" active><SearchAnimal  /></b-tab>
+            <b-tab title="Banco geral Bio-Online" active><SearchAnimal  /></b-tab>
             <b-tab title="Wikiaves"><WikiavesSearch  /></b-tab>
             <b-tab title="Ebird"><EbirdSearch /></b-tab>
             <b-tab title="INaturalist"><InaturalistSearch  /></b-tab>

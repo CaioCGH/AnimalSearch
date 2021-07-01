@@ -1,20 +1,32 @@
 <template>
 <div>
     <h2>Buscar espécie</h2>
-    <p>Busca exata</p>
+ 
         <form>
             <div class="row">
                 <div class="form-group col-md-9">
-                    <label htmlFor="exampleInputEmail1">Gênero</label>
-                    <input type="text" class="form-control" v-model="genus" name="genus" id="genus" aria-describedby="emailHelp" placeholder="Gênero" />
+                    <label >Gênero</label>
+                    <select v-model="chosenGenus" @change="update">
+                        <option v-for="genus in genera" :key="genus.id">
+                            {{ genus }}
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group col-md-9">
-                    <label htmlFor="exampleInputPassword1">Espécie</label>
-                    <input type="text" class="form-control" v-model="species" name="species" id="lastnspeciesame" placeholder="Espécie" />
+                    <label >Espécie</label>
+                    <select v-model="chosenSpecies" @change="update">
+                        <option v-for="species in speciesList" :key="species.id">
+                            {{ species }}
+                        </option>
+                    </select>
                 </div>
                 <div class="form-group col-md-9">
-                    <label htmlFor="exampleInputPassword1">Nome comum</label>
-                    <input type="text" class="form-control" v-model="commonName" name="commom_name" id="commom_name" placeholder="Nome comum" />
+                    <label >Nome comum</label>
+                    <select v-model="chosenCommonName" @change="update">
+                        <option v-for="commonName in commonNames" :key="commonName.id">
+                            {{ commonName }}
+                        </option>
+                    </select>
                 </div>
             </div>
             
@@ -39,7 +51,7 @@
 
 <script>
 
-import { searchAnimal } from '../services/UserService'
+import { searchAnimal, getGeneraSpeciesCommonName } from '../services/UserService'
 import { BSpinner } from 'bootstrap-vue'
 import AnimalRows from './AnimalRows.vue'
 
@@ -58,16 +70,25 @@ import AnimalRows from './AnimalRows.vue'
       animalRows : [],
       result: false,
       loading: false,
+      chosenGenus: '',
+      chosenSpecies: '',
+      chosenCommonName: '',
+      genera: [],
+      speciesList: [],
+      commonNames: []
     }
+  },
+  created() {
+       this.feedGeneraSpeciesCommonNameDropdown();
   },
     methods: {
         searchAnimal(){
             this.loading = true;
             
             const payload = {
-                genus: this.genus.trim(),
-                species: this.species.trim(),
-                commonName: this.commonName.trim()
+                genus: this.chosenGenus.trim(),
+                species: this.chosenSpecies.trim(),
+                commonName: this.chosenCommonName.trim()
             }
             searchAnimal(payload).then(
                 (value) => {
@@ -76,10 +97,17 @@ import AnimalRows from './AnimalRows.vue'
                     this.loading = false;
                 })
       },
-      clearForm() {
-          this.genus = "";
-          this.species = "";
-          this.commonName = "";
+      feedGeneraSpeciesCommonNameDropdown(){
+            getGeneraSpeciesCommonName().then(
+                (value) => {
+                    console.log(value);
+                    this.genera = value.genera;
+                    this.speciesList = value.speciesList;
+                    this.commonNames = value.commonNames;
+                })
+      },
+      update(){
+          console.log("updating..." + this.chosenGenus + this.chosenSpecies +this.chosenCommonName );
       }
   }
 }

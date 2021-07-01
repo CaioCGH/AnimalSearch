@@ -59,6 +59,11 @@ app.get('/api/get-bio-online-localities', async(req, res) => {
   res.json(bioOnlineLocalities); 
 });
 
+app.get('/api/get-genera-species-commonnames', async(req, res) => {
+  const generaSpeciesCommonNames = searchTools.getGeneraSpeciesCommonNames(rows);
+  res.json(generaSpeciesCommonNames); 
+});
+
 app.get('/api/bio-online-search-species-in-locality', async(req, res) => {
 
   const locality = req.query.locality;

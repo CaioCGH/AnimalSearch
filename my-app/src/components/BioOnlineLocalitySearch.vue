@@ -56,6 +56,8 @@
 
 import { bioOnlineSearchAnimalsInLocality, getBioOnlineLocalities } from '../services/UserService'
 import { BSpinner, } from 'bootstrap-vue'
+import { BFormCheckbox } from 'bootstrap-vue'
+
 import AnimalRows from './AnimalRows.vue'
 
     export default {
@@ -63,14 +65,14 @@ import AnimalRows from './AnimalRows.vue'
   props: ['selected'],
   components:{
       AnimalRows,
-      BSpinner
+      BSpinner, BFormCheckbox
   },
   data() {
     return {
       genus: '',
       species: '',
       commonName: '',
-      localities : ["hahaha", "mama mia", "horácio"],
+      localities : [],
       chosenLocality: null,
       animalRows: [],
       result: false,

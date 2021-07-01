@@ -1,5 +1,9 @@
 // tools.js
 // ========
+
+const GENUS_COLUMN = 11;
+const SPECIES_COLUMN = 12;
+const COMMON_NAME_COLUMN = 15;
 exports.find = (rows, searchCriteria) => {
       if(searchCriteria.species != ''){
           console.log("search for genus and species");
@@ -20,6 +24,27 @@ exports.find = (rows, searchCriteria) => {
 exports.getBioOnlineLocalities = (rows) => {
       return { localities: rows[3].slice(45,rows[3].length )};
     }
+
+exports.getGeneraSpeciesCommonNames = (rows) => {
+    genera = [];
+    speciesList = [];
+    commonNames = [];
+    for(var i = 4; i < rows.length; i++){
+      genera.push(rows[i][GENUS_COLUMN])
+      speciesList.push(rows[i][SPECIES_COLUMN])
+      commonNames.push(rows[i][COMMON_NAME_COLUMN])
+    }
+      return { genera: uniq(genera),
+      speciesList: uniq(speciesList),
+      commonNames: uniq(commonNames)};
+}
+
+
+    function uniq(a) {
+      return a.sort().filter(function(item, pos, ary) {
+          return !pos || item != ary[pos - 1];
+      });
+  }
 exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
   const localityIndex = findLocalityIndex(rows, locality);
   observedInLocalityRows = [];
