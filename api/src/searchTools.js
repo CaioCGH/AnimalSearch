@@ -1,7 +1,6 @@
 // tools.js
 // ========
-module.exports = {
-    find: function (rows, searchCriteria) {
+exports.find = (rows, searchCriteria) => {
       if(searchCriteria.species != ''){
           console.log("search for genus and species");
           return findMatchingRowsOnTwoCriteria(rows, searchCriteria.genus, searchCriteria.species, 11, 12);
@@ -17,8 +16,34 @@ module.exports = {
       console.log("unkown search");
       return [];
     }
-  };
-  
+
+exports.getBioOnlineLocalities = (rows) => {
+      return { localities: rows[3].slice(45,rows[3].length )};
+    }
+exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
+  const localityIndex = findLocalityIndex(rows, locality);
+  observedInLocalityRows = [];
+  for(var i = 4; i < rows.length; i++){
+    console.log(rows[i][localityIndex] + "result:"  + (rows[i][localityIndex] !== ''));
+    if(rows[i][localityIndex] !== '' && rows[i][localityIndex] !== undefined){
+      observedInLocalityRows.push(rows[i]);
+    }
+  }
+  return observedInLocalityRows;
+}
+
+
+var findLocalityIndex = function(rows, locality){
+    for(var i = 0; i < rows[0].length; i++){
+      if(rows[3][i].trim() === locality){ 
+        console.log("index found:" + i);
+        return i;
+      }
+    }
+    console.log("index not found:");
+    return 0;//execption 
+  }
+
   var findMatchingRowsOnOneCriteria = function (rows, string, index) {
     matchingRows = [];
     for(var i = 4; i < rows.length; i++){

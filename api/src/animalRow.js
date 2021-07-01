@@ -8,7 +8,6 @@ var createAnimalRows = function(headerRow, rows){
 
 var createAnimalRow = function(headerRow, row){
     animalRow = {};
-    console.log(headerRow[43]);
     for(var i = 0; i < row.length; i++){
         if(i > 43){
             if(i === 44){

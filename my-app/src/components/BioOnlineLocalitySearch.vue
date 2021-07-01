@@ -1,0 +1,95 @@
+<template>
+<div>
+    <h2>Buscar localidade</h2>
+        <form>
+            <div class="row">
+                <div class="form-group col-md-9">
+                    <label >Nome: </label>
+                    
+                    <select v-model="chosenLocality" @change="update">
+                        <option v-for="locality in localities" :key="locality.id">
+                            {{ locality }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" @click='bioOnlineSearchAnimalsInLocality()' class="btn btn-danger">
+                <span v-show="!loading">Pesquisar</span>
+                <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
+                <span v-show="loading">Aguarde, carregando</span>
+            </button>
+        </form>
+        <div v-if="animalRows.length > 0">
+            <AnimalRows :animalRows="animalRows" :selected="selected"/>
+        </div>
+        <div v-if="animalRows.length == 0 && result">
+            <div class="card border-primary mb-3 mt-3" >
+                <div class="card-body text-primary">
+                        Nenhum resultado encontrado para a busca
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+import { bioOnlineSearchAnimalsInLocality, getBioOnlineLocalities } from '../services/UserService'
+import { BSpinner, } from 'bootstrap-vue'
+import AnimalRows from './AnimalRows.vue'
+
+    export default {
+  name: 'BioOnlineLocalitySearch',
+  props: ['selected'],
+  components:{
+      AnimalRows,
+      BSpinner
+  },
+  data() {
+    return {
+      genus: '',
+      species: '',
+      commonName: '',
+      localities : ["hahaha", "mama mia", "horácio"],
+      chosenLocality: null,
+      animalRows: [],
+      result: false,
+      loading: false
+    }
+  },
+  created() {
+       this.feedBioOnlineLocalities();
+  },
+    methods: {
+        bioOnlineSearchAnimalsInLocality(){
+            this.loading = true;
+            
+            const payload = {
+                locality: this.chosenLocality.trim()
+            }
+            bioOnlineSearchAnimalsInLocality(payload).then(
+                (value) => {
+                    this.animalRows = value;
+                    this.result = true;
+                    this.loading = false;
+                })
+      },
+        feedBioOnlineLocalities(){
+            getBioOnlineLocalities().then(
+                (value) => {
+                    console.log(value);
+                    this.localities = value.localities;
+                })
+      },
+      clearForm() {
+          this.genus = "";
+          this.species = "";
+          this.commonName = "";
+      },
+      update(){
+          console.log("updating..." + this.chosenLocality);
+      }
+  }
+}
+</script>

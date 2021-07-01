@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        Banco de dados Geral Bio-online
+        Fauna do Município de São Paulo
     </div>
 </template>
 

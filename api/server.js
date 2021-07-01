@@ -6,69 +6,69 @@ const animalRow = require('./src/animalRow');
 const scraper = require('./src/scraper');
 const ebird = require('./src/ebird');
 const inaturalist = require('./src/inaturalist');
-
-port = 3000;
-
+const port = 3000;
 const { google } = require("googleapis");
 var googleAuth = require('google-auth-library');
-
-
 app.use(bodyParser.json());
 
-
-app.get('/api/genero-especie', async(req,res) => {
-    console.log('genero-especie called!!!!!!!');
-
-  const auth = new google.auth.GoogleAuth({
-    // keyfile: "credentials.json",
-    scopes: 'https://www.googleapis.com/auth/spreadsheets'
-  });
-  const client = await auth.getClient();
-  const googleSheets = google.sheets({ version: "v4", auth: client });
-  const spreadsheetId = "1yVcNxCu3uxD2dqmvLxkbZhi-DETwPW3ilzwpPzYaUZ4";
-
-  const getRows = await googleSheets.spreadsheets.values.get({
-    auth, spreadsheetId,
-    range: "Banco de Dados_Geral!L:M",
-  });
-  res.json(getRows);
-});
+var rows = [];
+var headerRow = [];
 
 
-app.post('/api/user', (req, res) => {
-  const searchCriteria = req.body.searchCriteria;
-  scraper.scrapeWikiavesName(searchCriteria.wikiavesCode)
-  .then((data) => {
-    console.log("data");
-    console.log(data);
-    res.json(data); 
-  });
+//conecta com a planilha google e constroi os objetos em memória para as queries
+(async () => {
+  try{
+    const auth = new google.auth.GoogleAuth({
+      // keyfile: "credentials.json",
+      scopes: 'https://www.googleapis.com/auth/spreadsheets'
+    });
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: "v4", auth: client });
+    const spreadsheetId = "1yVcNxCu3uxD2dqmvLxkbZhi-DETwPW3ilzwpPzYaUZ4";
+
+    const datasheetData = await googleSheets.spreadsheets.values.get({
+      auth, spreadsheetId,
+      range: "Banco de Dados_Geral!A:IM",
+    });
+    rows = datasheetData.data.values;
+    headerRow = animalRow.createHeaderRow(rows);
+    console.log("erm.................................")
+  } catch(e){
+  console.log(e);
+}
+})();
+
+
+app.get('/api/header', async(req,res) => {
+  res.json(headerRow);
 });
 
 
 app.post('/api/search-animal', async(req, res) => {
-  const auth = new google.auth.GoogleAuth({
-    // keyfile: "credentials.json",
-    scopes: 'https://www.googleapis.com/auth/spreadsheets'
-  });
-  const client = await auth.getClient();
-  const googleSheets = google.sheets({ version: "v4", auth: client });
-  const spreadsheetId = "1yVcNxCu3uxD2dqmvLxkbZhi-DETwPW3ilzwpPzYaUZ4";
-
-  const datasheetData = await googleSheets.spreadsheets.values.get({
-    auth, spreadsheetId,
-    range: "Banco de Dados_Geral!A:IM",
-  });
-  const rows = datasheetData.data.values;
-
   const searchCriteria = req.body.searchCriteria;
   console.log(searchCriteria);
   const matchingRows = searchTools.find(rows, req.body.searchCriteria);
   console.log(matchingRows);
 
-  
-  const headerRow = animalRow.createHeaderRow(rows);
   var animalRows = animalRow.createAnimalRows(headerRow, matchingRows);
+  res.json(animalRows); 
+});
+
+app.get('/api/get-bio-online-localities', async(req, res) => {
+  const bioOnlineLocalities = searchTools.getBioOnlineLocalities(rows);
+  res.json(bioOnlineLocalities); 
+});
+
+app.get('/api/bio-online-search-species-in-locality', async(req, res) => {
+
+  const locality = req.query.locality;
+
+  const observedInLocalityRows = searchTools.getBioOnlineSpeciesInLocality(rows, locality);
+
+  const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
+
+  console.log(animalRows.length);
+
   res.json(animalRows); 
 });
 

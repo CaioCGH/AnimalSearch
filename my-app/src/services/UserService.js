@@ -67,12 +67,20 @@ export async function inaturalistSearch(data) {
     return await response.json();
 }
 
-export async function createUser(data) {
-    console.log("criando usuário");
-    const response = await fetch(`/api/user`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({user: data})
+export async function getBioOnlineLocalities() {
+    const response = await fetch(`/api/get-bio-online-localities`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
+      })
+    return await response.json();
+}
+
+export async function bioOnlineSearchAnimalsInLocality(payload) {
+    const url = `/api/bio-online-search-species-in-locality?locality=${payload.locality}`;
+    console.log(url);
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
       })
     return await response.json();
 }
