@@ -26,20 +26,31 @@ exports.getBioOnlineLocalities = (rows) => {
     }
 
 exports.getGeneraSpeciesCommonNames = (rows) => {
-    genera = [];
-    speciesList = [];
+    generaSpeciesDict = {};
     commonNames = [];
     for(var i = 4; i < rows.length; i++){
-      genera.push(rows[i][GENUS_COLUMN])
-      speciesList.push(rows[i][SPECIES_COLUMN])
+      if(generaSpeciesDict[rows[i][GENUS_COLUMN]] === undefined){
+        generaSpeciesDict[rows[i][GENUS_COLUMN]] = [];
+      }
+      generaSpeciesDict[rows[i][GENUS_COLUMN]].push(rows[i][SPECIES_COLUMN]);
       commonNames.push(rows[i][COMMON_NAME_COLUMN])
     }
-      return { genera: uniq(genera),
-      speciesList: uniq(speciesList),
+
+    const orderedGeneraSpeciesDict = sortKeys(generaSpeciesDict);
+      return { generaSpeciesDict: orderedGeneraSpeciesDict,
       commonNames: uniq(commonNames)};
 }
 
 
+    function sortKeys(unorderedKeysObject) {
+      return Object.keys(unorderedKeysObject).sort().reduce(
+        (obj, key) => { 
+          obj[key] = unorderedKeysObject[key]; 
+          return obj;
+        }, 
+        {}
+      );
+  }
     function uniq(a) {
       return a.sort().filter(function(item, pos, ary) {
           return !pos || item != ary[pos - 1];

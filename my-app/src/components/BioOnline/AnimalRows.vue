@@ -24,7 +24,7 @@
 <script>
     export default {
         name: 'AnimalRows',
-        props: ['animalRows', 'selected'],
+        props: ['animalRows', 'selectedTab', 'selected'],
         data(){
             return{
                 attributeClasses: {

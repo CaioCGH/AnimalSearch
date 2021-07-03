@@ -29,7 +29,7 @@
             </button>
         </form>
         <div v-if="status === 'not_only_names' && animalRows.length > 0">
-            <AnimalRows :animalRows="animalRows" :selected="selected"/>
+            <AnimalRows :animalRows="animalRows" :selectedTab="selectedTab" :selected="selected"/>
         </div>
         <div v-if="status === 'only_names' && animalRows.length > 0">
                         <div class="card border-primary" >
@@ -54,7 +54,7 @@
 
 <script>
 
-import { bioOnlineSearchAnimalsInLocality, getBioOnlineLocalities } from '../services/UserService'
+import { bioOnlineSearchAnimalsInLocality, getBioOnlineLocalities } from './BioOnlineService'
 import { BSpinner, } from 'bootstrap-vue'
 import { BFormCheckbox } from 'bootstrap-vue'
 

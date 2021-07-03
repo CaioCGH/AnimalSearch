@@ -15,7 +15,7 @@
 <script>
 
 import  WikiavesAnimal  from './WikiavesAnimal.vue'
-import { wikiavesSearchWid } from '../services/UserService'
+import { wikiavesSearchWid } from './WikiavesService'
 import { BSpinner } from 'bootstrap-vue'
 
 export default {

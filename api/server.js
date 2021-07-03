@@ -10,7 +10,7 @@ const port = 3000;
 const { google } = require("googleapis");
 var googleAuth = require('google-auth-library');
 app.use(bodyParser.json());
-
+const LAST_DATA_COLUMN = 43; //última coluna antes das informações de observações
 var rows = [];
 var headerRow = [];
 
@@ -18,6 +18,7 @@ var headerRow = [];
 //conecta com a planilha google e constroi os objetos em memória para as queries
 (async () => {
   try{
+    console.log("Carregando planilha em memória..........")
     const auth = new google.auth.GoogleAuth({
       // keyfile: "credentials.json",
       scopes: 'https://www.googleapis.com/auth/spreadsheets'
@@ -32,7 +33,7 @@ var headerRow = [];
     });
     rows = datasheetData.data.values;
     headerRow = animalRow.createHeaderRow(rows);
-    console.log("erm.................................")
+    console.log("Planilha carregada em memória..........")
   } catch(e){
   console.log(e);
 }
@@ -41,6 +42,12 @@ var headerRow = [];
 
 app.get('/api/header', async(req,res) => {
   res.json(headerRow);
+});
+
+app.get('/api/bio-online-columns', async(req,res) => {
+  var regularColumns = headerRow.slice(0, LAST_DATA_COLUMN);
+  regularColumns.push("Observações registradas");
+  res.json(regularColumns);
 });
 
 

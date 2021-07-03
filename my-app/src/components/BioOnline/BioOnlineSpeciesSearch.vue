@@ -1,7 +1,6 @@
 <template>
 <div>
     <h2>Buscar espécie</h2>
- 
         <form>
             <div class="row">
                 <div class="form-group col-md-9">
@@ -36,8 +35,9 @@
                 <span v-show="loading">Aguarde, carregando</span>
             </button>
         </form>
+        
         <div v-if="animalRows.length > 0">
-            <AnimalRows :animalRows="animalRows" :selected="selected"/>
+            <AnimalRows :animalRows="animalRows" :selectedTab="selectedTab" :selected="selected"/>
         </div>
         <div v-if="animalRows.length == 0 && result">
             <div class="card border-primary mb-3 mt-3" >
@@ -51,13 +51,13 @@
 
 <script>
 
-import { searchAnimal, getGeneraSpeciesCommonName } from '../services/UserService'
+import { searchAnimal, getGeneraSpeciesCommonName } from './BioOnlineService'
 import { BSpinner } from 'bootstrap-vue'
 import AnimalRows from './AnimalRows.vue'
 
     export default {
   name: 'BioOnlineSpeciesSearch',
-  props: ['selected'],
+  props: ['selectedTab','selected'],
   components:{
       AnimalRows,
       BSpinner
@@ -73,6 +73,7 @@ import AnimalRows from './AnimalRows.vue'
       chosenGenus: '',
       chosenSpecies: '',
       chosenCommonName: '',
+      generaSpeciesDict: {},
       genera: [],
       speciesList: [],
       commonNames: []
@@ -100,14 +101,14 @@ import AnimalRows from './AnimalRows.vue'
       feedGeneraSpeciesCommonNameDropdown(){
             getGeneraSpeciesCommonName().then(
                 (value) => {
-                    console.log(value);
-                    this.genera = value.genera;
-                    this.speciesList = value.speciesList;
+                    this.generaSpeciesDict = value.generaSpeciesDict;
+                    this.genera = Object.keys(value.generaSpeciesDict);
                     this.commonNames = value.commonNames;
                 })
       },
       update(){
           console.log("updating..." + this.chosenGenus + this.chosenSpecies +this.chosenCommonName );
+          this.speciesList = this.generaSpeciesDict[this.chosenGenus];
       }
   }
 }
