@@ -1,16 +1,14 @@
 <template>
   <div class="container">
-        <SearchSourcesDescription :description="description"/>
+    <SearchSourcesDescription :description="description" />
 
-    <h2>Procurar no Wikiaves</h2>
-    <p>Buscar por nome científico ou comum. Tente:</p>
-    <ul>
-      <li>quero-quero</li>
-      <li>papagaio</li>
-      <li>Inezia caudata</li>
-      <li>Ortalis canicollis</li>
-    </ul>
     <div class="row">
+      <div class="col-md-7 mrgnbtm">
+        <p>Buscar por nome científico ou comum. Tente:</p>
+        <ul v-for="example in examples" :key="example.id">
+          <li @click="pasteToForm(example)">{{ example }}</li>
+        </ul>
+      </div>
       <div class="col-md-7 mrgnbtm">
         <form>
           <div class="row">
@@ -61,24 +59,32 @@
 <script>
 import { wikiavesSearch } from "./WikiavesService";
 import { BSpinner } from "bootstrap-vue";
-import SearchSourcesDescription from '../SearchSourcesDescription.vue'
+import SearchSourcesDescription from "../SearchSourcesDescription.vue";
 
 import WikiavesSearchTermDisambiguation from "./WikiavesSearchTermDisambiguation.vue";
 
 export default {
   name: "WikiavesSearch",
   components: {
-    WikiavesSearchTermDisambiguation,SearchSourcesDescription,
+    WikiavesSearchTermDisambiguation,
+    SearchSourcesDescription,
     BSpinner,
   },
   data() {
     return {
-      description: "O <a href=\"https://www.wikiaves.com.br/\">WikiAves</a> é um site de conteúdo interativo, direcionado à comunidade brasileira de observadores de aves, com o objetivo de apoiar, divulgar e promover a atividade de observação de aves e a ciência cidadã, fornecendo gratuitamente ferramentas avançadas para controle de registros fotográficos e sonoros, textos, identificação de espécies, comunicação entre observadores, entre outras.\nJuntos construímos continuamente a maior base de dados sobre aves do Brasil na Internet.",
+      description:
+        'O <a href="https://www.wikiaves.com.br/">WikiAves</a> é um site de conteúdo interativo, direcionado à comunidade brasileira de observadores de aves, com o objetivo de apoiar, divulgar e promover a atividade de observação de aves e a ciência cidadã, fornecendo gratuitamente ferramentas avançadas para controle de registros fotográficos e sonoros, textos, identificação de espécies, comunicação entre observadores, entre outras.\nJuntos construímos continuamente a maior base de dados sobre aves do Brasil na Internet.',
       wikiavesSearchTerm: "",
       wikiavesSearchTermResult: [],
       animalData: {},
       hasSearched: false,
       loading: false,
+      examples: [
+        "quero-quero",
+        "papagaio",
+        "Inezia caudata",
+        "Ortalis canicollis",
+      ],
     };
   },
   methods: {
@@ -94,6 +100,9 @@ export default {
         this.hasSearched = true;
         this.loading = false;
       });
+    },
+    pasteToForm(example) {
+      this.wikiavesSearchTerm = example;
     },
   },
 };

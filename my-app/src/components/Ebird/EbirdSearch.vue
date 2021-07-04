@@ -5,11 +5,11 @@
     <div class="row">
         <p>Observações nos últimos 30 dias.</p>
         <p>Apenas nomes científicos. Tente:</p>
-        <ul>
-          <li>Procnias nudicollis</li>
-          <li>Cariama cristata</li>
-          <li>Eudocimus ruber</li>
+         <div class="col-md-7 mrgnbtm">
+        <ul v-for="example in examples" :key="example.id">
+          <li @click='pasteToForm(example)'>{{ example }}</li>
         </ul>
+        </div>
         <div class="col-md-7 mrgnbtm">
             <form>
                 <div class="row">
@@ -62,7 +62,10 @@ export default {
       observationDataList: [],
       hasSearched: false,
       loading: false,
-      emptyForm: true
+      emptyForm: true,
+      examples:['Procnias nudicollis',
+          'Cariama cristata',
+          'Eudocimus ruber']
     }
   },
     methods: {
@@ -79,6 +82,9 @@ export default {
                     this.hasSearched = true;
                     this.loading = false;
                 })
+        },
+        pasteToForm(example){
+            this.scientificName = example;
         }
     }
 }
