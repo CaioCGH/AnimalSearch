@@ -26,6 +26,10 @@
                 <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                 <span v-show="loading">Aguarde, carregando</span>
             </button>
+
+            <button type="button" @click='clearForms()' class="btn btn-light">
+                <span v-show="!loading">Limpar campos</span>
+            </button>
         </form>
         <div v-if="status === 'not_only_names' && animalRows.length > 0">
             <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray"/>
@@ -103,10 +107,8 @@ import AnimalRows from './AnimalRows.vue'
                     this.localities = value.localities;
                 })
       },
-      clearForm() {
-          this.genus = "";
-          this.species = "";
-          this.commonName = "";
+      clearForms() {
+          this.chosenLocality = null;
       },
       update(){
           console.log("updating..." + this.chosenLocality);
