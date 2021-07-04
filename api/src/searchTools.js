@@ -1,9 +1,14 @@
 // tools.js
 // ========
 
+const TAXONOMY_RANGE = [0, 18];
+const BIOLOGY_RANGE = [18, 32];
+const CONCERN_RANGE = [32, 44];
+
 const GENUS_COLUMN = 11;
 const SPECIES_COLUMN = 12;
 const COMMON_NAME_COLUMN = 15;
+
 exports.find = (rows, searchCriteria) => {
       if(searchCriteria.species != ''){
           console.log("search for genus and species");
@@ -41,7 +46,6 @@ exports.getGeneraSpeciesCommonNames = (rows) => {
       commonNames: uniq(commonNames)};
 }
 
-
     function sortKeys(unorderedKeysObject) {
       return Object.keys(unorderedKeysObject).sort().reduce(
         (obj, key) => { 
@@ -56,6 +60,17 @@ exports.getGeneraSpeciesCommonNames = (rows) => {
           return !pos || item != ary[pos - 1];
       });
   }
+exports.getBioOnlineColumns = (headerRows) => {
+  var columnsData = {
+    "Básico": ["Nome Científico", "Nome Comum", "IUCN/2021 (versão 2021-1)", "CITES/2021"],
+    "Taxonomia": headerRows.slice(TAXONOMY_RANGE[0], TAXONOMY_RANGE[1]),
+    "Biologia": headerRows.slice(BIOLOGY_RANGE[0], BIOLOGY_RANGE[1]),
+    "Categorias de Ameaça": headerRows.slice(CONCERN_RANGE[0], CONCERN_RANGE[1]),
+    "Observações registradas":  ["Observações registradas"]
+  }
+  return columnsData;
+}
+
 exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
   const localityIndex = findLocalityIndex(rows, locality);
   observedInLocalityRows = [];
@@ -67,7 +82,6 @@ exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
   }
   return observedInLocalityRows;
 }
-
 
 var findLocalityIndex = function(rows, locality){
     for(var i = 0; i < rows[0].length; i++){

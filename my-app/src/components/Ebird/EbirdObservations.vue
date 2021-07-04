@@ -6,7 +6,7 @@
             <div class="card border-primary mb-3" >
                 <div class="card-body text-primary">
                     <tr v-for="(value, key) in observation" :key="key">
-                        <td>{{ key }}</td>
+                        <td>{{ key }}: </td>
                         <td>{{ value}}</td>
                     </tr>
                 </div>

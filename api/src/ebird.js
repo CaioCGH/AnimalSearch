@@ -2,7 +2,6 @@ var request = require('request');
 const fs = require("fs");
 const parse = require('csv-parse/lib/sync');
 var ebirdTaxonomy = [];
-console.log(__dirname + "/../resources/ebirdtaxonomy.csv");
 fs.readFile(__dirname + "/../resources/ebirdtaxonomy.csv", (error, data) => {
     if(error) {
         throw error;
@@ -20,7 +19,6 @@ exports.ebirdSearch = (searchText) =>{
     const speciesCode = findEbirdCodeByScientificName(searchText);
     const regionCode = "BR-SP"
     const ebirdapitoken = process.env.EBIRD_TOKEN;
-    console.log(ebirdapitoken);
 
     const url = `https://api.ebird.org/v2/data/obs/${regionCode}/recent/${speciesCode}?sppLocale=pt-br`;
 
@@ -38,10 +36,6 @@ exports.ebirdSearch = (searchText) =>{
             if(error){
                 reject(error);
             }
-            console.log("response.body");
-            console.log(response.body);
-            console.log("response.body");
-
             jsonData = JSON.parse(response.body);
             resolve(jsonData);
         });

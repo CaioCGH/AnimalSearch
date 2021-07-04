@@ -6,7 +6,7 @@
             <div class="card border-primary mb-3" >
                 <div class="card-body text-primary">
                     <tr v-for="(value, key) in animalRow" :key="key">
-                            <td v-if="shouldDisplay(key)">{{ key }}</td>
+                            <td v-if="shouldDisplay(key)">{{ key }}:</td>
                             <td v-if="shouldDisplay(key) && key != 'Observações registradas'">{{ value }}</td>
                             <div v-if="shouldDisplay(key) && key === 'Observações registradas'">
                                 <tr  class="card border-primary mb-3" v-for="(value2, key2) in value" :key="key2.id">
@@ -24,7 +24,7 @@
 <script>
     export default {
         name: 'AnimalRows',
-        props: ['animalRows', 'selectedTab', 'selected'],
+        props: ['animalRows', 'selectedArray'],
         data(){
             return{
                 attributeClasses: {
@@ -77,7 +77,7 @@
         },
         methods:{
             shouldDisplay(key){
-                return this.$props.selected.includes(this.attributeClasses[key]);
+                return this.$props.selectedArray.includes(key);
             }
         }
     }

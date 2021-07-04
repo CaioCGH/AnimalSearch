@@ -8,7 +8,6 @@ exports.inaturalistSearch = (searchText) =>{
     // const q = "Rio de Janeiro";
 
     const url = `https://www.inaturalist.org/observations.json?taxon_name=${taxonName}&has[]=photos&place_type=${placeType}&q=${q}`;
-    console.log(url);
     var options = {
         'method': 'GET',
         'url': url
@@ -19,7 +18,6 @@ exports.inaturalistSearch = (searchText) =>{
                 reject(error);
             }
             jsonData = JSON.parse(response.body);
-            console.log(jsonData)
             var relevantDataArray = [];
             for(var i = 0; i < jsonData.length; i++){
                 let relevantData = {
@@ -34,7 +32,6 @@ exports.inaturalistSearch = (searchText) =>{
                 }
                 relevantDataArray.push(relevantData);
             }
-            console.log(relevantDataArray)
             resolve(relevantDataArray);
         });
     })

@@ -3,7 +3,7 @@
         <SearchSourcesDescription :description="description"/>
 
     <div class="row">
-        <h2>Observações da ave no estado de São Paulo nos últimos 30 dias</h2>
+        <p>Observações nos últimos 30 dias.</p>
         <p>Apenas nomes científicos. Tente:</p>
         <ul>
           <li>Procnias nudicollis</li>
@@ -15,22 +15,22 @@
                 <div class="row">
                     <div class="form-group col-md-9">
                         Nome científico
-                        <input type="text" class="form-control" v-model="scientificName" name="wikiavesSearchTerm" id="wikiavesSearchTerm" aria-describedby="emailHelp" placeholder="buscar no Ebird" />
+                        <input type="text" class="form-control" v-model="scientificName" name="wikiavesSearchTerm" aria-describedby="emailHelp" placeholder="buscar no Ebird" />
                         <input v-show="false">
                     </div>
                 </div>
-                <button type="button" @click='ebirdSearch()' class="btn btn-danger">
+                <button type="button" :disabled="scientificName.length == 0" @click='ebirdSearch()' class="btn btn-danger">
                      <span v-show="!loading">Pesquisar</span>
                     <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                     <span v-show="loading">Aguarde, carregando</span>
                 </button>
             </form>
         </div>
-        <div v-if="hasSearched || observationDataList.length != 0">
+        <div v-if="hasSearched && observationDataList.errors  == undefined">
             <EbirdObservations :observationDataList="observationDataList" />
         </div>
 
-        <div v-if="hasSearched && observationDataList.length === 0">
+        <div v-else-if="observationDataList.errors != undefined && observationDataList.errors.length > 0">
             <div class="card border-primary mb-3 mt-3" >
                 <div class="card-body text-primary">
                       Nenhum resultado encontrado para a busca
@@ -61,7 +61,8 @@ export default {
       scientificName: '',
       observationDataList: [],
       hasSearched: false,
-      loading: false
+      loading: false,
+      emptyForm: true
     }
   },
     methods: {

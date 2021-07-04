@@ -5,34 +5,31 @@
           <b-form-group label="Elementos devolvidos:" v-slot="{ ariaDescribedby }">
             <b-tab title="Simples" active>
               <b-form-checkbox-group
-                id="checkbox-group-1"
-                v-model="selectedArray[0]"
-                :options="simpleOptions"
+                v-model="selectedArray"
+                :options="completeOptions['Básico']"
                 :aria-describedby="ariaDescribedby"
-                :checked="selectedArray[0]"></b-form-checkbox-group>
+                :checked="selectedArray"></b-form-checkbox-group>
               </b-tab>
-            <b-tab title="Classe" >
-              <b-form-checkbox-group
-                id="checkbox-group-1"
-                v-model="selectedArray[1]"
-                :options="classOptions"
-                :aria-describedby="ariaDescribedby"
-                :checked="selectedArray[1]"></b-form-checkbox-group>
-              </b-tab>
+
             <b-tab title="Completo">
+              <b-card v-for="category in Object.keys(allSelected)" :key="category.id">
+                <b-form-checkbox
+                size="lg"
+                v-model="allSelected[category]"
+                @change="toggleAll(allSelected[category],category)"
+                >{{ category }}</b-form-checkbox>
             <b-form-checkbox-group
-                id="checkbox-group-1"
-                v-model="selectedArray[2]"
-                :options="completeOptions"
+                v-model="selectedArray"
+                :options="completeOptions[category]"
                 :aria-describedby="ariaDescribedby"
-                :checked="selectedArray[2]"></b-form-checkbox-group>
+                :checked="selectedArray"></b-form-checkbox-group>
+              </b-card>
             </b-tab>
           </b-form-group>
           </b-tabs>
-
             <b-tabs  content-class="mt-4">
-                <b-tab title="Busca espécie" active><BioOnlineSpeciesSearch  :selectedTab="selectedTab" :selected="selectedArray[selectedTab]"/></b-tab>
-                <b-tab title="Busca local"><BioOnlineLocalitySearch  :selectedTab="selectedTab" :selected="selectedArray[selectedTab]"/></b-tab>
+                <b-tab title="Busca espécie" active><BioOnlineSpeciesSearch   :selectedArray="selectedArray"/></b-tab>
+                <b-tab title="Busca local"><BioOnlineLocalitySearch  :selectedArray="selectedArray"/></b-tab>
             </b-tabs>
         </div>
 </template>
@@ -46,52 +43,47 @@ import SearchSourcesDescription from '../SearchSourcesDescription.vue'
 import { getBioOnlineColumns } from './BioOnlineService'
 import { BTabs } from 'bootstrap-vue'
 import { BTab } from 'bootstrap-vue'
-import { BFormCheckboxGroup, BFormGroup } from 'bootstrap-vue'
+import { BFormCheckboxGroup, BFormCheckbox, BFormGroup, BCard } from 'bootstrap-vue'
 
 
 export default {
   name: 'SearchAnimal',
   components:{
       BioOnlineSpeciesSearch, BioOnlineLocalitySearch, SearchSourcesDescription,
-       BTabs, BTab, BFormCheckboxGroup, BFormGroup
+       BTabs, BTab, BFormCheckboxGroup,BFormCheckbox, BFormGroup, BCard
   },
   data(){
     return{
       description: "A <a href=\"https://www.prefeitura.sp.gov.br/cidade/secretarias/meio_ambiente/\">Secretaria Municipal do Verde e do Meio Ambiente</a>, com o objetivo de subsidiar e dar diretrizes às ações ambientais no âmbito do município de São Paulo desenvolve projetos de levantamento da biodiversidade em diversas áreas do seu território. O conhecimento sobre a flora e a fauna silvestres é o ponto de partida para definir áreas prioritárias para a conservação e a elaboração dos planos de manejos das áreas verdes, bem como para dar subsídio às tomadas de decisão relativas ao manejo da fauna silvestre, às análises de estudos e relatórios de impacto ambiental (EIA/RIMA), aos programas e ações de educação ambiental.",
       selectedTab: null,
-      selectedArray: [
-        ['scientificName', 'scientificName', 'IUCN/2021', 'CITES/2021'],
-        ['taxonomy', 'biology/ecology', 'concern', 'observations'],
-        []
-      ],
-        simpleOptions: [
-          { text: 'Nome científico', value: 'scientificName' },
-          { text: 'Nome comum', value: 'scientificName' },
-          { text: 'IUCN/2021', value: 'IUCN/2021' },
-          { text: 'CITES/2021', value: 'CITES/2021' }
-        ],
-        classOptions: [
-          { text: 'Taxonomia', value: 'taxonomy' },
-          { text: 'Biologia/Ecologia', value: 'biology/ecology' },
-          { text: 'Categorias de Ameaça', value: 'concern' },
-          { text: 'Observações', value: 'observations' }
-        ],
-        completeOptions: []
+      selectedArray: ['Nome Científico', 'Nome Comum'],
+        completeOptions: [],
+        allSelected:{
+          "Básico": false,
+          "Taxonomia": false,
+          "Biologia": false,
+          "Categorias de Ameaça": false,
+          "Observações registradas": false,
+        }
     }
   },
   methods:{
     feedCompleteOptions(){
        getBioOnlineColumns().then(
                 (value) => {
-                    for(const item of value){
-                      this.completeOptions.push(
-                        {text: item, value: item}
-                      )
-                    }
-                })
+                      this.completeOptions = value;
+                    })
     },
     update(){
       console.log("updating: " + this.selectedTab);
+    },
+    toggleAll(checked, category ){
+      this.selectedArray = this.selectedArray.filter(n => !this.completeOptions[category].includes(n))
+      if(!checked){
+        for(var i = 0; i < this.completeOptions[category].length; i++){
+          this.selectedArray.push(this.completeOptions[category][i]);
+        }
+      }
     }
   },
   created(){

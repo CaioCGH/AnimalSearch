@@ -29,7 +29,7 @@
             </button>
         </form>
         <div v-if="status === 'not_only_names' && animalRows.length > 0">
-            <AnimalRows :animalRows="animalRows" :selectedTab="selectedTab" :selected="selected"/>
+            <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray"/>
         </div>
         <div v-if="status === 'only_names' && animalRows.length > 0">
                         <div class="card border-primary" >
@@ -62,7 +62,7 @@ import AnimalRows from './AnimalRows.vue'
 
     export default {
   name: 'BioOnlineLocalitySearch',
-  props: ['selected'],
+  props: ['selectedArray'],
   components:{
       AnimalRows,
       BSpinner, BFormCheckbox

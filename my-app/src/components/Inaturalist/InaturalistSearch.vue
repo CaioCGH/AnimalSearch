@@ -15,11 +15,11 @@
                 <div class="row">
                     <div class="form-group col-md-9">
                         Nome científico
-                        <input type="text" class="form-control" v-model="scientificName" name="wikiavesSearchTerm" id="wikiavesSearchTerm" aria-describedby="emailHelp" placeholder="buscar no Inaturalist" />
+                        <input type="text" class="form-control" v-model="scientificName" placeholder="buscar no Inaturalist" />
                         <input v-show="false">
                     </div>
                 </div>
-                <button type="button" @click='inaturalistSearch()' class="btn btn-danger">
+                <button type="button" :disabled="scientificName.length == 0" @click='inaturalistSearch()' class="btn btn-danger">
                      <span v-show="!loading">Pesquisar</span>
                     <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                     <span v-show="loading">Aguarde, carregando</span>

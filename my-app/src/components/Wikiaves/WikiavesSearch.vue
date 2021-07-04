@@ -19,9 +19,6 @@
                 type="text"
                 class="form-control"
                 v-model="wikiavesSearchTerm"
-                name="wikiavesSearchTerm"
-                id="wikiavesSearchTerm"
-                aria-describedby="emailHelp"
                 placeholder="buscar no Wikiaves"
               />
               <input v-show="false" />
@@ -29,6 +26,7 @@
           </div>
           <button
             type="button"
+            :disabled="wikiavesSearchTerm.length == 0"
             @click="wikiavesSearch()"
             class="btn btn-danger"
           >

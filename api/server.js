@@ -39,24 +39,15 @@ var headerRow = [];
 }
 })();
 
-
-app.get('/api/header', async(req,res) => {
-  res.json(headerRow);
-});
-
 app.get('/api/bio-online-columns', async(req,res) => {
-  var regularColumns = headerRow.slice(0, LAST_DATA_COLUMN);
-  regularColumns.push("Observações registradas");
-  res.json(regularColumns);
+  var columns = searchTools.getBioOnlineColumns(headerRow);
+  res.json(columns);
 });
-
 
 app.post('/api/search-animal', async(req, res) => {
   const searchCriteria = req.body.searchCriteria;
   console.log(searchCriteria);
   const matchingRows = searchTools.find(rows, req.body.searchCriteria);
-  console.log(matchingRows);
-
   var animalRows = animalRow.createAnimalRows(headerRow, matchingRows);
   res.json(animalRows); 
 });
@@ -79,7 +70,7 @@ app.get('/api/bio-online-search-species-in-locality', async(req, res) => {
 
   const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
 
-  console.log(animalRows.length);
+  (animalRows.length);
 
   res.json(animalRows); 
 });

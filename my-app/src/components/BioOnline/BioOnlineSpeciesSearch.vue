@@ -37,7 +37,7 @@
         </form>
         
         <div v-if="animalRows.length > 0">
-            <AnimalRows :animalRows="animalRows" :selectedTab="selectedTab" :selected="selected"/>
+            <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray"/>
         </div>
         <div v-if="animalRows.length == 0 && result">
             <div class="card border-primary mb-3 mt-3" >
@@ -57,7 +57,7 @@ import AnimalRows from './AnimalRows.vue'
 
     export default {
   name: 'BioOnlineSpeciesSearch',
-  props: ['selectedTab','selected'],
+  props: ['selectedArray'],
   components:{
       AnimalRows,
       BSpinner

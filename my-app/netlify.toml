@@ -1,4 +1,37 @@
 [[redirects]]
+  from = "/api/bio-online-columns"
+  to = "http://anmal-search.herokuapp.com/api/bio-online-columns"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/search-animal"
+  to = "http://anmal-search.herokuapp.com/api/search-animal"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/get-bio-online-localities"
+  to = "http://anmal-search.herokuapp.com/api/get-bio-online-localities"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/get-genera-species-commonnames"
+  to = "http://anmal-search.herokuapp.com/api/get-genera-species-commonnames"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/bio-online-search-species-in-locality"
+  to = "http://anmal-search.herokuapp.com/api/bio-online-search-species-in-locality"
+  status = 200
+  force = true
+
+
+
+
+[[redirects]]
   from = "/api/wikiaves-search"
   to = "http://anmal-search.herokuapp.com/api/wikiaves-search"
   status = 200
@@ -10,11 +43,6 @@
   status = 200
   force = true
 
-[[redirects]]
-  from = "/api/search-animal"
-  to = "http://anmal-search.herokuapp.com/api/search-animal"
-  status = 200
-  force = true
 
 [[redirects]]
   from = "/api/ebird-search"
@@ -28,20 +56,3 @@
   status = 200
   force = true
 
-[[redirects]]
-  from = "/api/get-bio-online-localities"
-  to = "http://anmal-search.herokuapp.com/api/get-bio-online-localities"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/bio-online-search-species-in-locality"
-  to = "http://anmal-search.herokuapp.com/api/bio-online-search-species-in-locality"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/get-genera-species-commonnames"
-  to = "http://anmal-search.herokuapp.com/api/get-genera-species-commonnames"
-  status = 200
-  force = true
