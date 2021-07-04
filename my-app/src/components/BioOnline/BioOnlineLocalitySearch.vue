@@ -1,6 +1,5 @@
 <template>
 <div>
-    <h2>Buscar localidade</h2>
         <form>
             <div class="row">
                 <div class="form-group col-md-9">

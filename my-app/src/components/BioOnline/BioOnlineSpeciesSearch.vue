@@ -1,6 +1,5 @@
 <template>
 <div>
-    <h2>Buscar espécie</h2>
         <form>
             <div class="row">
                 <div class="form-group col-md-9">
@@ -33,6 +32,10 @@
                 <span v-show="!loading">Pesquisar</span>
                 <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                 <span v-show="loading">Aguarde, carregando</span>
+            </button>
+
+            <button type="button" @click='clearForms()' class="btn btn-light">
+                <span v-show="!loading">Limpar campos</span>
             </button>
         </form>
         
@@ -109,6 +112,11 @@ import AnimalRows from './AnimalRows.vue'
       update(){
           console.log("updating..." + this.chosenGenus + this.chosenSpecies +this.chosenCommonName );
           this.speciesList = this.generaSpeciesDict[this.chosenGenus];
+      },
+      clearForms(){
+          this.chosenGenus = '';
+      this.chosenSpecies =  '';
+      this.chosenCommonName =  '';
       }
   }
 }
