@@ -1,118 +1,136 @@
 <template>
-<div>
-        <form>
-            <div class="row">
-                <div class="form-group col-md-9">
-                    <b-form-checkbox
-                        id="checkbox-1"
-                        v-model="status"
-                        name="checkbox-1"
-                        value="only_names"
-                        unchecked-value="not_only_names">
-                            Apenas lista de espécies
-                    </b-form-checkbox>
-                    <label >Nome: </label>
-                    
-                    <select v-model="chosenLocality" @change="update">
-                        <option v-for="locality in localities" :key="locality.id">
-                            {{ locality }}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            
-            <button type="button" @click='bioOnlineSearchAnimalsInLocality()' class="btn btn-danger mb-4">
+  <div>
+    <form>
+      <div class="row">
+        <div class="form-group col-md-9">
+          <b-form-group label="Formato do resultado:" v-slot="{ ariaDescribedby }">
+      <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_cards">Lista de cartões</b-form-radio>
+      <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_table">Tabela</b-form-radio>
+           </b-form-group>
+          <label>Nome: </label>
+
+          <select v-model="chosenLocality" @change="update">
+            <option v-for="locality in localities" :key="locality.id">
+              {{ locality }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mb-4">
+            <b-button
+            @click='bioOnlineSearchAnimalsInLocality()'
+            variant="primary" class="mr-2" 
+            :disabled='chosenLocality == null'>
                 <span v-show="!loading">Pesquisar</span>
                 <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                 <span v-show="loading">Aguarde, carregando</span>
-            </button>
+            </b-button>
 
-            <button type="button" @click='clearForms()' class="btn btn-light">
+            <b-button
+            v-b-modal="'downloadListModal'"
+            class="mr-2"
+            :disabled='chosenLocality == null'>
+                <span v-show="!loading">Baixar lista</span>
+                <b-spinner v-show="loadingDownload" small variant="primary" label="Spinning"></b-spinner>
+                <span v-show="loading">Aguarde, carregando</span>
+            </b-button>
+
+            <b-button
+            @click='clearForms()'
+            variant="outline-secondary" class="mr-2">
                 <span v-show="!loading">Limpar campos</span>
-            </button>
-        </form>
-        <div v-if="status === 'not_only_names' && animalRows.length > 0">
-            <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray"/>
-        </div>
-        <div v-if="status === 'only_names' && animalRows.length > 0">
-                        <div class="card border-primary" >
-                            <div class="card-body">
+            </b-button>
 
-                        <tr v-for="animalRow in animalRows" :key="animalRow.id"> 
-                            <td class="mb=8">{{animalRow['Gênero']}} {{animalRow['Espécie']}}</td>
-                            <td>{{animalRow['Nome Comum']}}</td>
-                        </tr>
-        </div>
-        </div>
-        </div>
-        <div v-if="animalRows.length == 0 && result">
-            <div class="card border-primary mb-3 mt-3" >
-                <div class="card-body text-primary">
-                        Nenhum resultado encontrado para a busca
-                </div>
             </div>
-        </div>
+            <SelectDataFormat :locality="chosenLocality" :animalRows="animalRows" :selectedArray="selectedArray"/>
+    </form>
+    <div v-if="display_type === 'display_cards' && animalRows.length > 0">
+      <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray" />
     </div>
+    <div v-if="display_type === 'display_table' && animalRows.length > 0">
+      <BioOnlineTableRows :animalRows="animalRows" :selectedArray="selectedArray" />
+    </div>
+  </div>
 </template>
 
 <script>
+import {
+  bioOnlineSearchAnimalsInLocality,
+  getBioOnlineLocalities,
+  downLoadList,
+} from "./BioOnlineService";
+import BioOnlineTableRows from './BioOnlineTableRows.vue'
+import SelectDataFormat from './SelectDataFormat.vue'
+import AnimalRows from "./AnimalRows.vue";
 
-import { bioOnlineSearchAnimalsInLocality, getBioOnlineLocalities } from './BioOnlineService'
-import { BSpinner, } from 'bootstrap-vue'
-import { BFormCheckbox } from 'bootstrap-vue'
-
-import AnimalRows from './AnimalRows.vue'
-
-    export default {
-  name: 'BioOnlineLocalitySearch',
-  props: ['selectedArray'],
-  components:{
-      AnimalRows,
-      BSpinner, BFormCheckbox
+export default {
+  name: "BioOnlineLocalitySearch",
+  props: ["selectedArray"],
+  components: {
+    AnimalRows,
+    BioOnlineTableRows,
+    SelectDataFormat
   },
   data() {
     return {
-      genus: '',
-      species: '',
-      commonName: '',
-      localities : [],
+      genus: "",
+      species: "",
+      commonName: "",
+      localities: [],
       chosenLocality: null,
       animalRows: [],
       result: false,
       loading: false,
-      status: 'not_only_names'
-    }
+      loadingDownload: false,
+      display_type: "display_cards",
+    };
   },
   created() {
-       this.feedBioOnlineLocalities();
+    this.feedBioOnlineLocalities();
   },
-    methods: {
-        bioOnlineSearchAnimalsInLocality(){
-            this.loading = true;
+  methods: {
+    bioOnlineSearchAnimalsInLocality() {
+      this.loading = true;
+
+      const payload = {
+        locality: this.chosenLocality.trim(),
+      };
+      bioOnlineSearchAnimalsInLocality(payload).then((value) => {
+        this.animalRows = value;
+        this.result = true;
+        this.loading = false;
+      });
+    },
+    downLoadList(){
+            this.loadingDownload = true;
             
             const payload = {
-                locality: this.chosenLocality.trim()
+                genus: this.chosenGenus.trim(),
+                species: this.chosenSpecies.trim(),
+                commonName: this.chosenCommonName.trim()
             }
-            bioOnlineSearchAnimalsInLocality(payload).then(
+            downLoadList(payload).then(
                 (value) => {
-                    this.animalRows = value;
+                    console.log("value");
+                    (value)
+                    console.log(value);
                     this.result = true;
                     this.loading = false;
-                })
+                });
       },
-        feedBioOnlineLocalities(){
-            getBioOnlineLocalities().then(
-                (value) => {
-                    console.log(value);
-                    this.localities = value.localities;
-                })
-      },
-      clearForms() {
-          this.chosenLocality = null;
-      },
-      update(){
-          console.log("updating..." + this.chosenLocality);
-      }
-  }
-}
+    feedBioOnlineLocalities() {
+      getBioOnlineLocalities().then((value) => {
+        console.log(value);
+        this.localities = value.localities;
+      });
+    },
+    clearForms() {
+      this.chosenLocality = null;
+    },
+    update() {
+      console.log("updating..." + this.chosenLocality);
+    },
+  },
+};
 </script>

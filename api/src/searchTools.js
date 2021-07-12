@@ -75,7 +75,6 @@ exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
   const localityIndex = findLocalityIndex(rows, locality);
   observedInLocalityRows = [];
   for(var i = 4; i < rows.length; i++){
-    console.log(rows[i][localityIndex] + "result:"  + (rows[i][localityIndex] !== ''));
     if(rows[i][localityIndex] !== '' && rows[i][localityIndex] !== undefined){
       observedInLocalityRows.push(rows[i]);
     }

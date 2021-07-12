@@ -6,6 +6,7 @@ const animalRow = require('./src/animalRow');
 const scraper = require('./src/scraper');
 const ebird = require('./src/ebird');
 const inaturalist = require('./src/inaturalist');
+const downloadableDataMaker = require('./src/downloadableDataMaker');
 const port = 3000;
 const { google } = require("googleapis");
 var googleAuth = require('google-auth-library');
@@ -44,10 +45,8 @@ app.get('/api/bio-online-columns', async(req,res) => {
   res.json(columns);
 });
 
-app.post('/api/search-animal', async(req, res) => {
-  const searchCriteria = req.body.searchCriteria;
-  console.log(searchCriteria);
-  const matchingRows = searchTools.find(rows, req.body.searchCriteria);
+app.get('/api/search-animal', async(req, res) => {
+  const matchingRows = searchTools.find(rows, req.query);
   var animalRows = animalRow.createAnimalRows(headerRow, matchingRows);
   res.json(animalRows); 
 });
@@ -63,15 +62,9 @@ app.get('/api/get-genera-species-commonnames', async(req, res) => {
 });
 
 app.get('/api/bio-online-search-species-in-locality', async(req, res) => {
-
   const locality = req.query.locality;
-
   const observedInLocalityRows = searchTools.getBioOnlineSpeciesInLocality(rows, locality);
-
   const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
-
-  (animalRows.length);
-
   res.json(animalRows); 
 });
 
@@ -111,8 +104,26 @@ app.post('/api/inaturalist-search', async(req, res) => {
   });
 });
 
+app.post("/api/download-from-locality", function (req, res) {
+  console.log(req.body);
+  const locality = req.body.searchCriteria.locality;
+  const observedInLocalityRows = searchTools.getBioOnlineSpeciesInLocality(rows, locality);
+  const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
+  downloadableDataMaker.makeSheet(res, req.body.searchCriteria, animalRows);
+})
+
 app.get("/", function (req, res) {
-  res.send("<h1>Hello World! in FaunaSP</h1>")
+  res.send("<h1>Bem vindo à API da FaunaSP!</h1>")
+})
+
+
+app.post("/api/download-bio-online-list", function (req, res) {
+  const searchCriteria = req.body.searchCriteria;
+  console.log(searchCriteria);
+  const matchingRows = searchTools.find(rows, req.body.searchCriteria);
+  var animalRows = animalRow.createAnimalRows(headerRow, matchingRows);
+  const fileURL = downloadableDataMaker.makeSheet(res, animalRows);
+  res.sendFile(fileURL.blob);
 })
 
 

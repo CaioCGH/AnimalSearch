@@ -26,7 +26,6 @@ var createAnimalRow = function(headerRow, row){
         }
     }
     animalRow["Nome Científico"] = animalRow["Gênero"] + " " + animalRow["Espécie"];
-    console.log(animalRow);
     return animalRow;
 }
 

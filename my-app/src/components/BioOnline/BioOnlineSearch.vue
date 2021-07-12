@@ -3,7 +3,13 @@
     <SearchSourcesDescription :description="description"/>
           <b-tabs  v-model="selectedTab" @change="update" content-class="mt-4">
           <b-form-group label="Elementos devolvidos:" v-slot="{ ariaDescribedby }">
-            <b-tab title="Simples" active>
+            <b-spinner
+          v-show="loadingColumns"
+          small
+          variant="primary"
+          label="Spinning"
+        ></b-spinner>
+            <b-tab title="Básico" active>
               <b-form-checkbox-group
                 v-model="selectedArray"
                 :options="completeOptions['Básico']"
@@ -56,6 +62,7 @@ export default {
     return{
       description: "A <a href=\"https://www.prefeitura.sp.gov.br/cidade/secretarias/meio_ambiente/\">Secretaria Municipal do Verde e do Meio Ambiente</a>, com o objetivo de subsidiar e dar diretrizes às ações ambientais no âmbito do município de São Paulo desenvolve projetos de levantamento da biodiversidade em diversas áreas do seu território. O conhecimento sobre a flora e a fauna silvestres é o ponto de partida para definir áreas prioritárias para a conservação e a elaboração dos planos de manejos das áreas verdes, bem como para dar subsídio às tomadas de decisão relativas ao manejo da fauna silvestre, às análises de estudos e relatórios de impacto ambiental (EIA/RIMA), aos programas e ações de educação ambiental.",
       selectedTab: null,
+      loadingColumns: true,
       selectedArray: ['Nome Científico', 'Nome Comum'],
         completeOptions: [],
         allSelected:{
@@ -88,6 +95,7 @@ export default {
   },
   created(){
     this.feedCompleteOptions();
+    this.loadingColumns = false;
   }
 }
 </script>

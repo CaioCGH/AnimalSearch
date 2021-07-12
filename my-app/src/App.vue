@@ -1,22 +1,26 @@
 <template>
   <div id="app">
-    <!-- <Header/>
-    <SearchAnimal />
-    <GenreSpeciesBoard /> -->
-    <Dashboard />
+        <Navbar />
+    <!-- <Header /> -->
+    <router-view></router-view>
+    <Footer />
   </div>
 </template>
 
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import Dashboard from './components/Dashboard.vue'
+import Navbar from './components/Navbar.vue'
+// import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
+
 
 
 export default {
-  name: 'App',
   components: {
-    Dashboard
+      Navbar,
+      //  Header,
+        Footer
   }
 }
 </script>

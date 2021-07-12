@@ -26,11 +26,13 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.9",
     "csv-parse": "^4.16.0",
+    "exceljs": "^4.2.1",
     "express": "^4.17.1",
     "google-auth-library": "^0.12.0",
     "googleapis": "^67.1.0",
     "http-proxy-middleware": "^1.0.4",
     "netlify-lambda": "^2.0.7",
+    "node-json-xlsx": "^0.2.2",
     "random-id": "^1.0.4",
     "serverless-http": "^2.7.0"
   },

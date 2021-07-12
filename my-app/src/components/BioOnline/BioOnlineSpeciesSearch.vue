@@ -9,6 +9,12 @@
                             {{ genus }}
                         </option>
                     </select>
+                    <b-spinner
+          v-show="loadingSelectables"
+          small
+          variant="primary"
+          label="Spinning"
+        ></b-spinner>
                 </div>
                 <div class="form-group col-md-9">
                     <label >Espécie</label>
@@ -25,18 +31,33 @@
                             {{ commonName }}
                         </option>
                     </select>
+                    <b-spinner
+          v-show="loadingSelectables"
+          small
+          variant="primary"
+          label="Spinning"
+        ></b-spinner>
                 </div>
             </div>
-            
-            <button type="button" @click='searchAnimal()' class="btn btn-danger">
+
+<div class="mb-4">
+            <b-button
+            @click='searchAnimal()'
+            variant="primary" class="mr-2" 
+            :disabled="chosenGenus == '' && chosenCommonName == ''">
                 <span v-show="!loading">Pesquisar</span>
                 <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                 <span v-show="loading">Aguarde, carregando</span>
-            </button>
-
-            <button type="button" @click='clearForms()' class="btn btn-light">
+            </b-button>
+            
+            <b-button
+            @click='clearForms()'
+            variant="outline-secondary" class="mr-2">
                 <span v-show="!loading">Limpar campos</span>
-            </button>
+            </b-button>
+
+            </div>
+           
         </form>
         
         <div v-if="animalRows.length > 0">
@@ -55,7 +76,6 @@
 <script>
 
 import { searchAnimal, getGeneraSpeciesCommonName } from './BioOnlineService'
-import { BSpinner } from 'bootstrap-vue'
 import AnimalRows from './AnimalRows.vue'
 
     export default {
@@ -63,16 +83,17 @@ import AnimalRows from './AnimalRows.vue'
   props: ['selectedArray'],
   components:{
       AnimalRows,
-      BSpinner
   },
   data() {
     return {
-      genus: '',
-      species: '',
-      commonName: '',
+      genus: null,
+      species: null,
+      commonName: null,
       animalRows : [],
       result: false,
       loading: false,
+      loadingDownload: false,
+      loadingSelectables:true,
       chosenGenus: '',
       chosenSpecies: '',
       chosenCommonName: '',
@@ -84,6 +105,7 @@ import AnimalRows from './AnimalRows.vue'
   },
   created() {
        this.feedGeneraSpeciesCommonNameDropdown();
+       this.loadingSelectables = false;
   },
     methods: {
         searchAnimal(){
@@ -114,9 +136,9 @@ import AnimalRows from './AnimalRows.vue'
           this.speciesList = this.generaSpeciesDict[this.chosenGenus];
       },
       clearForms(){
-          this.chosenGenus = '';
-      this.chosenSpecies =  '';
-      this.chosenCommonName =  '';
+        this.chosenGenus = '';
+        this.chosenSpecies =  '';
+        this.chosenCommonName =  '';
       }
   }
 }
