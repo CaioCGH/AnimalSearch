@@ -1,7 +1,7 @@
 <template>
 <div>
     <div>
-    <b-table striped hover :items="animalRows" :fields=selectedArray></b-table>
+    <b-table striped hover :items="animalRows" :fields="selectedArray"></b-table>
   </div>
   </div>
 </template>

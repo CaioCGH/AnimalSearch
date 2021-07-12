@@ -27,7 +27,7 @@
             type="button"
             :disabled="scientificName.length == 0"
             @click="inaturalistSearch()"
-            class="btn btn-danger"
+            class="btn btn-danger mb-3"
           >
             <span v-show="!loading">Pesquisar</span>
             <b-spinner

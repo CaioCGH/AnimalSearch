@@ -37,6 +37,7 @@
           variant="primary"
           label="Spinning"
         ></b-spinner>
+        {{ loadingSelectables }}
                 </div>
             </div>
 
@@ -105,7 +106,6 @@ import AnimalRows from './AnimalRows.vue'
   },
   created() {
        this.feedGeneraSpeciesCommonNameDropdown();
-       this.loadingSelectables = false;
   },
     methods: {
         searchAnimal(){
@@ -129,6 +129,7 @@ import AnimalRows from './AnimalRows.vue'
                     this.generaSpeciesDict = value.generaSpeciesDict;
                     this.genera = Object.keys(value.generaSpeciesDict);
                     this.commonNames = value.commonNames;
+                    this.loadingSelectables = false;
                 })
       },
       update(){

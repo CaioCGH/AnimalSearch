@@ -9,7 +9,7 @@
       <span v-if="visible">Esconder</span>
       <span v-else>Mostrar</span>
     </b-button>
-    <b-collapse id="collapse-4" v-model="visible" class="mt-2">
+    <b-collapse id="collapse-4" v-model="visible" class="mt-2 mb-2">
       <b-card><span v-html="description"></span></b-card>
     </b-collapse>
   </div>

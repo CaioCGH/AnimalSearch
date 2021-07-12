@@ -19,7 +19,7 @@
                         <input v-show="false">
                     </div>
                 </div>
-                <button type="button" :disabled="scientificName.length == 0" @click='ebirdSearch()' class="btn btn-danger">
+                <button type="button" :disabled="scientificName.length == 0" @click='ebirdSearch()' class="btn btn-danger mb-3">
                      <span v-show="!loading">Pesquisar</span>
                     <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
                     <span v-show="loading">Aguarde, carregando</span>
