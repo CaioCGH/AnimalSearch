@@ -30,7 +30,7 @@
 
 [[redirects]]
   from = "/api/download-from-locality"
-  to = "http://anmal-search.herokuapp.com/api/api/download-from-locality"
+  to = "http://anmal-search.herokuapp.com/api/download-from-locality"
   status = 200
   force = true
 
