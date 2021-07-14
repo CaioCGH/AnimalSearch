@@ -58,7 +58,6 @@ app.get('/api/get-bio-online-localities', async(req, res) => {
 
 app.get('/api/get-genera-species-commonnames', async(req, res) => {
   const generaSpeciesCommonNames = searchTools.getGeneraSpeciesCommonNames(rows);
-  sleep(50000);
   res.json(generaSpeciesCommonNames); 
 });
 
@@ -131,12 +130,3 @@ app.post("/api/download-bio-online-list", function (req, res) {
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Server listening on the port::${process.env.PORT} or 3000`);
 });
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}

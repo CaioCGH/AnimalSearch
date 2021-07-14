@@ -2,46 +2,21 @@
 <div>
         <form>
             <div class="row">
-                <div class="form-group col-md-9">
-                    <label >Gênero</label>
-                    <select v-model="chosenGenus" @change="update">
-                        <option v-for="genus in genera" :key="genus.id">
-                            {{ genus }}
-                        </option>
-                    </select>
+                <div>
+                    <b-form-select v-model="chosenGenus" :options="genera" @change="update"></b-form-select>
+                    <b-form-select v-model="chosenSpecies" :options="speciesList" @change="update"></b-form-select>
+                    Ou
+                    <b-form-select v-model="chosenCommonName" :options="commonNames"></b-form-select>
+                </div>
                     <b-spinner
           v-show="loadingSelectables"
           small
           variant="primary"
           label="Spinning"
         ></b-spinner>
-                </div>
-                <div class="form-group col-md-9">
-                    <label >Espécie</label>
-                    <select v-model="chosenSpecies" @change="update">
-                        <option v-for="species in speciesList" :key="species.id">
-                            {{ species }}
-                        </option>
-                    </select>
-                </div>
-                <div class="form-group col-md-9">
-                    <label >Nome comum</label>
-                    <select v-model="chosenCommonName" @change="update">
-                        <option v-for="commonName in commonNames" :key="commonName.id">
-                            {{ commonName }}
-                        </option>
-                    </select>
-                    <b-spinner
-          v-show="loadingSelectables"
-          small
-          variant="primary"
-          label="Spinning"
-        ></b-spinner>
-        {{ loadingSelectables }}
-                </div>
             </div>
 
-<div class="mb-4">
+          <div class="mb-4 mt-2">
             <b-button
             @click='searchAnimal()'
             variant="primary" class="mr-2" 
@@ -75,72 +50,78 @@
 </template>
 
 <script>
+import { searchAnimal, getGeneraSpeciesCommonName } from "./BioOnlineService";
+import AnimalRows from "./AnimalRows.vue";
 
-import { searchAnimal, getGeneraSpeciesCommonName } from './BioOnlineService'
-import AnimalRows from './AnimalRows.vue'
-
-    export default {
-  name: 'BioOnlineSpeciesSearch',
-  props: ['selectedArray'],
-  components:{
-      AnimalRows,
+export default {
+  name: "BioOnlineSpeciesSearch",
+  props: ["selectedArray"],
+  components: {
+    AnimalRows,
   },
   data() {
     return {
       genus: null,
       species: null,
       commonName: null,
-      animalRows : [],
+      animalRows: [],
       result: false,
       loading: false,
       loadingDownload: false,
-      loadingSelectables:true,
-      chosenGenus: '',
-      chosenSpecies: '',
-      chosenCommonName: '',
+      loadingSelectables: true,
+      chosenGenus: "",
+      chosenSpecies: "",
+      chosenCommonName: "",
       generaSpeciesDict: {},
-      genera: [],
-      speciesList: [],
-      commonNames: []
-    }
+      genera: [{ value: "", text: "Gênero" }],
+      speciesList: [{ value: "", text: "Espécie" }],
+      commonNames: [{ value: "", text: "Nome comum" }],
+    };
   },
   created() {
-       this.feedGeneraSpeciesCommonNameDropdown();
+    this.feedGeneraSpeciesCommonNameDropdown();
   },
-    methods: {
-        searchAnimal(){
-            this.loading = true;
-            
-            const payload = {
-                genus: this.chosenGenus.trim(),
-                species: this.chosenSpecies.trim(),
-                commonName: this.chosenCommonName.trim()
-            }
-            searchAnimal(payload).then(
-                (value) => {
-                    this.animalRows = value;
-                    this.result = true;
-                    this.loading = false;
-                })
-      },
-      feedGeneraSpeciesCommonNameDropdown(){
-            getGeneraSpeciesCommonName().then(
-                (value) => {
-                    this.generaSpeciesDict = value.generaSpeciesDict;
-                    this.genera = Object.keys(value.generaSpeciesDict);
-                    this.commonNames = value.commonNames;
-                    this.loadingSelectables = false;
-                })
-      },
-      update(){
-          console.log("updating..." + this.chosenGenus + this.chosenSpecies +this.chosenCommonName );
-          this.speciesList = this.generaSpeciesDict[this.chosenGenus];
-      },
-      clearForms(){
-        this.chosenGenus = '';
-        this.chosenSpecies =  '';
-        this.chosenCommonName =  '';
-      }
-  }
-}
+  methods: {
+    searchAnimal() {
+      this.loading = true;
+
+      const payload = {
+        genus: this.chosenGenus.trim(),
+        species: this.chosenSpecies.trim(),
+        commonName: this.chosenCommonName.trim(),
+      };
+      searchAnimal(payload).then((value) => {
+        this.animalRows = value;
+        this.result = true;
+        this.loading = false;
+      });
+    },
+    feedGeneraSpeciesCommonNameDropdown() {
+      getGeneraSpeciesCommonName().then((value) => {
+        console.log(value);
+        this.generaSpeciesDict = value.generaSpeciesDict;
+
+        const genera = Object.keys(value.generaSpeciesDict);
+        for (let i = 0; i < genera.length; i++) {
+          this.genera.push({ text: genera[i], value: genera[i]  });
+        }
+        for (let i = 0; i < value.commonNames.length; i++) {
+          this.commonNames.push({ text: value.commonNames[i], value: value.commonNames[i] });
+        }
+
+        this.loadingSelectables = false;
+      });
+    },
+    update() {
+      this.speciesList = this.generaSpeciesDict[this.chosenGenus];
+      this.chosenSpecies = this.speciesList[0];
+    },
+    clearForms() {
+      this.chosenGenus = "";
+      this.chosenSpecies = "";
+      this.chosenCommonName = "";
+      this.speciesList =  [{ value: "", text: "Espécie" }];
+    },
+  },
+};
 </script>

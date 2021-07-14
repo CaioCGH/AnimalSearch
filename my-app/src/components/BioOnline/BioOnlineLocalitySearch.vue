@@ -7,13 +7,8 @@
       <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_cards">Lista de cartões</b-form-radio>
       <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_table">Tabela</b-form-radio>
            </b-form-group>
-          <label>Nome: </label>
 
-          <select v-model="chosenLocality" @change="update">
-            <option v-for="locality in localities" :key="locality.id">
-              {{ locality }}
-            </option>
-          </select>
+           <b-form-select v-model="chosenLocality" :options="localities" @change="update"></b-form-select>
         </div>
       </div>
 
@@ -74,11 +69,9 @@ export default {
   },
   data() {
     return {
-      genus: "",
-      species: "",
-      commonName: "",
-      localities: [],
-      chosenLocality: null,
+     
+      localities: [{ value: "", text: "Localidade" }],
+      chosenLocality: "",
       animalRows: [],
       result: false,
       loading: false,
@@ -92,7 +85,8 @@ export default {
   methods: {
     bioOnlineSearchAnimalsInLocality() {
       this.loading = true;
-
+console.log(this.chosenLocality.trim());
+console.log(this.chosenLocality);
       const payload = {
         locality: this.chosenLocality.trim(),
       };
@@ -122,11 +116,12 @@ export default {
     feedBioOnlineLocalities() {
       getBioOnlineLocalities().then((value) => {
         console.log(value);
-        this.localities = value.localities;
+        this.localities.push(...value.localities);
       });
     },
     clearForms() {
-      this.chosenLocality = null;
+      this.chosenLocality = '';
+      // this.localities =  [{ value: "", text: "Localidade" }];
     },
     update() {
       console.log("updating..." + this.chosenLocality);

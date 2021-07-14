@@ -6,6 +6,7 @@
             <b-tab title="Wikiaves"><WikiavesSearch  /></b-tab>
             <b-tab title="Ebird"><EbirdSearch /></b-tab>
             <b-tab title="INaturalist"><InaturalistSearch  /></b-tab>
+            <b-tab title="Fontes combinadas"><MixedSource  /></b-tab>
           </b-tabs>
     </div>
   </div>
@@ -16,12 +17,13 @@ import BioOnlineSearch from './BioOnline/BioOnlineSearch.vue'
 import WikiavesSearch from './Wikiaves/WikiavesSearch.vue'
 import EbirdSearch from './Ebird/EbirdSearch.vue'
 import InaturalistSearch from './Inaturalist/InaturalistSearch.vue'
+import MixedSource from './Mixed/MixedSource.vue'
 
 
 export default {
   components: {
     BioOnlineSearch,
-    WikiavesSearch, EbirdSearch, InaturalistSearch
+    WikiavesSearch, EbirdSearch, InaturalistSearch, MixedSource
   },
   data() {
       return {
