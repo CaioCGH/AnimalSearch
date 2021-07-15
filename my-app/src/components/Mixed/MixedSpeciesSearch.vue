@@ -54,7 +54,7 @@ export default {
       loadingSelectables: true,
       chosenGenus: "",
       chosenSpecies: "",
-      chosenCommonName: "quero-quero",
+      chosenCommonName: "",
       generaSpeciesDict: {},
       genera: [{ value: "", text: "Gênero" }],
       speciesList: [{ value: "", text: "Espécie" }],
