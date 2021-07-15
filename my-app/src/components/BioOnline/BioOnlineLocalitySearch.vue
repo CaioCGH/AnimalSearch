@@ -1,51 +1,50 @@
 <template>
   <div>
     <form>
-      <div class="row">
-        <div class="form-group col-md-9">
-          <b-form-group label="Formato do resultado:" v-slot="{ ariaDescribedby }">
-      <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_cards">Lista de cartões</b-form-radio>
-      <b-form-radio v-model="display_type" :aria-describedby="ariaDescribedby" name="display_type" value="display_table">Tabela</b-form-radio>
-           </b-form-group>
-
-           <b-form-select v-model="chosenLocality" :options="localities" @change="update"></b-form-select>
-        </div>
-      </div>
-
-      <div class="mb-4">
-            <b-button
-            @click='bioOnlineSearchAnimalsInLocality()'
-            variant="primary" class="mr-2" 
-            :disabled='chosenLocality == null'>
-                <span v-show="!loading">Pesquisar</span>
-                <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
-                <span v-show="loading">Aguarde, carregando</span>
-            </b-button>
-
-            <b-button
-            v-b-modal="'downloadListModal'"
-            class="mr-2"
-            :disabled='chosenLocality == null'>
-                <span v-show="!loading">Baixar lista</span>
-                <b-spinner v-show="loadingDownload" small variant="primary" label="Spinning"></b-spinner>
-                <span v-show="loading">Aguarde, carregando</span>
-            </b-button>
-
-            <b-button
-            @click='clearForms()'
-            variant="outline-secondary" class="mr-2">
-                <span v-show="!loading">Limpar campos</span>
-            </b-button>
-
-            </div>
-            <SelectDataFormat :locality="chosenLocality" :animalRows="animalRows" :selectedArray="selectedArray"/>
+      <b-form-select
+        v-model="chosenLocality"
+        :options="localities"
+        @change="update"
+      ></b-form-select>
     </form>
-    <div v-if="display_type === 'display_cards' && animalRows.length > 0">
-      <AnimalRows :animalRows="animalRows" :selectedArray="selectedArray" />
+
+    <div class="mb-4 mt-2" >
+      <b-button
+        @click="bioOnlineSearchAnimalsInLocality()"
+        variant="primary"
+        class="mr-2"
+        :disabled="chosenLocality == ''"
+      >
+        <span v-show="!loading">Pesquisar</span>
+        <b-spinner
+          v-show="loading"
+          small
+          variant="primary"
+          label="Spinning"
+        ></b-spinner>
+        <span v-show="loading">Aguarde, carregando</span>
+      </b-button>
+
+      <b-button
+        v-b-modal="'downloadListModal'"
+        class="mr-2"
+        :disabled="chosenLocality == ''"
+      >
+        <span v-show="!loading">Baixar lista</span>
+        <b-spinner
+          v-show="loadingDownload"
+          small
+          variant="primary"
+          label="Spinning"
+        ></b-spinner>
+        <span v-show="loading">Aguarde, carregando</span>
+      </b-button>
+
+      <b-button @click="clearForms()" variant="outline-secondary" class="mr-2">
+        <span v-show="!loading">Limpar campos</span>
+      </b-button>
     </div>
-    <div v-if="display_type === 'display_table' && animalRows.length > 0">
-      <BioOnlineTableRows :animalRows="animalRows" :selectedArray="selectedArray" />
-    </div>
+    <SelectDataFormat :locality="chosenLocality" />
   </div>
 </template>
 
@@ -55,28 +54,19 @@ import {
   getBioOnlineLocalities,
   downLoadList,
 } from "./BioOnlineService";
-import BioOnlineTableRows from './BioOnlineTableRows.vue'
-import SelectDataFormat from './SelectDataFormat.vue'
-import AnimalRows from "./AnimalRows.vue";
+import SelectDataFormat from "./SelectDataFormat.vue";
 
 export default {
-  name: "BioOnlineLocalitySearch",
-  props: ["selectedArray"],
   components: {
-    AnimalRows,
-    BioOnlineTableRows,
-    SelectDataFormat
+    SelectDataFormat,
   },
   data() {
     return {
-     
       localities: [{ value: "", text: "Localidade" }],
       chosenLocality: "",
-      animalRows: [],
       result: false,
       loading: false,
       loadingDownload: false,
-      display_type: "display_cards",
     };
   },
   created() {
@@ -85,8 +75,8 @@ export default {
   methods: {
     bioOnlineSearchAnimalsInLocality() {
       this.loading = true;
-console.log(this.chosenLocality.trim());
-console.log(this.chosenLocality);
+      console.log(this.chosenLocality.trim());
+      console.log(this.chosenLocality);
       const payload = {
         locality: this.chosenLocality.trim(),
       };
@@ -96,23 +86,22 @@ console.log(this.chosenLocality);
         this.loading = false;
       });
     },
-    downLoadList(){
-            this.loadingDownload = true;
-            
-            const payload = {
-                genus: this.chosenGenus.trim(),
-                species: this.chosenSpecies.trim(),
-                commonName: this.chosenCommonName.trim()
-            }
-            downLoadList(payload).then(
-                (value) => {
-                    console.log("value");
-                    (value)
-                    console.log(value);
-                    this.result = true;
-                    this.loading = false;
-                });
-      },
+    downLoadList() {
+      this.loadingDownload = true;
+
+      const payload = {
+        genus: this.chosenGenus.trim(),
+        species: this.chosenSpecies.trim(),
+        commonName: this.chosenCommonName.trim(),
+      };
+      downLoadList(payload).then((value) => {
+        console.log("value");
+        value;
+        console.log(value);
+        this.result = true;
+        this.loading = false;
+      });
+    },
     feedBioOnlineLocalities() {
       getBioOnlineLocalities().then((value) => {
         console.log(value);
@@ -120,11 +109,29 @@ console.log(this.chosenLocality);
       });
     },
     clearForms() {
-      this.chosenLocality = '';
-      // this.localities =  [{ value: "", text: "Localidade" }];
+      this.chosenLocality = "";
+      this.$store.commit("updateAnimalRows", []);
     },
     update() {
       console.log("updating..." + this.chosenLocality);
+    },
+  },
+  computed: {
+    displayType: {
+      get() {
+        return this.$store.state.displayType;
+      },
+      set(value) {
+        this.$store.commit("updateDisplayType", value);
+      },
+    },
+    animalRows: {
+      get() {
+        return this.$store.state.animalRows;
+      },
+      set(value) {
+        this.$store.commit("updateAnimalRows", value);
+      },
     },
   },
 };

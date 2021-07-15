@@ -38,7 +38,7 @@
 <script>
 
 export default {
-      props: ["animalInfo", "selectedArray"],
+      props: ["animalInfo"],
       
 
     data() {
@@ -68,7 +68,7 @@ this.transformAnimalDictIntoRows();
             }
         },
         rowClass(item) {
-        if (!this.$props.selectedArray.includes(item.key)){
+        if (!this.$store.state.selectedArray.includes(item.key)){
             return 'd-none'
         }
       },

@@ -18,7 +18,7 @@
 
           <div class="mb-4 mt-2">
             <b-button
-            @click='searchAnimal()'
+            @click='mixedSearch()'
             variant="primary" class="mr-2" 
             :disabled="chosenGenus == '' && chosenCommonName == ''">
                 <span v-show="!loading">Pesquisar</span>
@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import { searchAnimal, getGeneraSpeciesCommonName } from "./BioOnlineService";
+import { mixedSearch } from "./MixedService";
+import { getGeneraSpeciesCommonName,  } from "../BioOnline/BioOnlineService";
 
 export default {
   components: {
@@ -53,7 +54,7 @@ export default {
       loadingSelectables: true,
       chosenGenus: "",
       chosenSpecies: "",
-      chosenCommonName: "",
+      chosenCommonName: "quero-quero",
       generaSpeciesDict: {},
       genera: [{ value: "", text: "Gênero" }],
       speciesList: [{ value: "", text: "Espécie" }],
@@ -64,7 +65,7 @@ export default {
     this.feedGeneraSpeciesCommonNameDropdown();
   },
   methods: {
-    searchAnimal() {
+    mixedSearch() {
       this.loading = true;
 
       const payload = {
@@ -72,8 +73,8 @@ export default {
         species: this.chosenSpecies.trim(),
         commonName: this.chosenCommonName.trim(),
       };
-      searchAnimal(payload).then((value) => {
-        this.$store.state.animalRows = value;
+      mixedSearch(payload).then((value) => {
+        this.$store.state.mixedAnimalRows = value;
         this.result = true;
         this.loading = false;
       });
