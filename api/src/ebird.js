@@ -17,6 +17,7 @@ fs.readFile(__dirname + "/../resources/ebirdtaxonomy.csv", (error, data) => {
 exports.ebirdSearch = (searchText) =>{
 
     const speciesCode = findEbirdCodeByScientificName(searchText);
+    console.log("searchText", searchText);
     const regionCode = "BR-SP"
     const ebirdapitoken = process.env.EBIRD_TOKEN;
 

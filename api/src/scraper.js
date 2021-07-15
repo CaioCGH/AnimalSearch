@@ -1,7 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 
-exports.scrapeWikiavesSearchWid = (wikiavesCode) =>{
+exports.scrapewikiavesSearchByWid = (wikiavesCode) =>{
     const url = "https://www.wikiaves.com.br/wiki/" + wikiavesCode;
     console.log(url);
     return new Promise((resolve, reject)=>{

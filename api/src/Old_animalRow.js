@@ -145,21 +145,6 @@ class SpeciesBiology{
             this.locomotion = locomotion;
         }
 }
-class Test{
-    constructor(a){
-        this.a = a;
-    }
-
-    static createTest(a){
-        return new Test(a);
-    }
-}
-
-var createViewRecordsMatrix = function(rows){
-    var viewRecords = {};
-    for(var i = 40)
-
-}
 
 
 module.exports = {AnimalRow,SpeciesBiology, Test};

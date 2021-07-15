@@ -79,8 +79,8 @@ app.post('/api/wikiaves-search', async(req, res) => {
 
 app.post('/api/wikiaves-search-wid', async(req, res) => {
   const searchCriteria = req.body.searchCriteria;
-  console.log(searchCriteria)
-  scraper.scrapeWikiavesSearchWid(searchCriteria.wid)
+  console.log("in server, searchCriteria", searchCriteria)
+  scraper.scrapewikiavesSearchByWid(searchCriteria.wid)
   .then((data) => {
     res.json(data); 
   });

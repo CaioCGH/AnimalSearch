@@ -83,15 +83,15 @@ exports.getBioOnlineSpeciesInLocality = (rows, locality) => {
 }
 
 var findLocalityIndex = function(rows, locality){
-  console.log(locality);
+  locality = locality.trim().replace(/\s+/g, " ");
     for(var i = 0; i < rows[3].length; i++){
       console.log(rows[3][i].trim());
       if(rows[3][i].trim().replace(/\s+/g, " ") === locality){ 
-        console.log("locality index found:" + i);
+        console.log("locality index found for [" +locality+"]: "  + i);
         return i;
       }
     }
-    console.log("locality index not found:");
+    console.log("locality index not found for locality [" +locality+"]");
     return Number.MAX_SAFE_INTEGER;//exception 
   }
 
