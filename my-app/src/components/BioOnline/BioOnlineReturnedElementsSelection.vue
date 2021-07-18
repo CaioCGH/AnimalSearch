@@ -18,7 +18,7 @@
                 ></b-form-checkbox-group>
               </b-tab>
 
-            <b-tab title="Completo">
+            <b-tab v-b-tooltip.hover title="Completo">
               <b-card v-for="category in Object.keys(allSelected)" :key="category.id">
                 <b-form-checkbox
                 size="lg"

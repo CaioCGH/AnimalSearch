@@ -16,6 +16,10 @@
         </b-button>
       </template>
 
+      <template #cell(value)="data">
+        <span v-b-tooltip.hover :title="conservationStatusDict[data.value]">{{ data.value}}</span>
+      </template>
+
       <template #row-details="row">
             <b-card>
             <b-table
@@ -41,7 +45,6 @@ export default {
         return {
             animalInfoAsRows: [],
             row: {}
-
         }
     },
     created(){
@@ -72,6 +75,14 @@ this.transformAnimalDictIntoRows();
             return  row.item.innerObject !== undefined;
       }
 
+    },
+    computed:{
+      conservationStatusDict:{
+        get(){
+          return this.$store.state.conservationStatusDict;
+        }
+      }
     }
+
 }
 </script>
