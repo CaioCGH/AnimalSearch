@@ -24,13 +24,13 @@
 
 [[redirects]]
   from = "/api/bio-online-search-species-in-locality"
-  to = "http://anmal-search.herokuapp.com/api/bio-online-search-species-in-locality"
+  to = "http://anmal-search.herokuapp.com/api/bio-online-search-species-in-localities"
   status = 200
   force = true
 
 [[redirects]]
   from = "/api/download-from-locality"
-  to = "http://anmal-search.herokuapp.com/api/download-from-locality"
+  to = "http://anmal-search.herokuapp.com/api/download-from-localities"
   status = 200
   force = true
 
