@@ -1,8 +1,9 @@
 <template>
-  <div v-if="locality"><!-- por agum motivo está abrindo o modal duas vezes, a primeira sem props --> 
-    <b-modal id="downloadListModal">
+  <div><!-- por agum motivo está abrindo o modal duas vezes, a primeira sem props --> 
+    <b-modal id="modalId">
       <b-container fluid>
         Selecione o formato do arquivo para baixar:
+        <!-- {{this}} -->
         <div>
           <b-form-select
             v-model="selectedFormat"
@@ -36,16 +37,16 @@
   </div>
 </template>
 <script>
-import { downloadFromLocality } from "./BioOnlineService";
+import { downloadFromLocalities } from "./BioOnlineService";
 
 export default {
-  props: ["locality"],
+  props: ['timesOpened'],
   data() {
     return {
       loading: false,
       selectedFormat: ".xls",
       options: [
-        { text: ".xls" },
+        { text: ".xls", value: ".xls", disabled: false },
         { text: ".csv (em breve)", disabled: true },
         { text: ".pdf (em breve)", disabled: true },
         { text: ".json (em breve)", disabled: true },
@@ -56,20 +57,24 @@ export default {
     download() {
       this.loading = true;
 
-      downloadFromLocality(
-        this.$props.locality,
-        this.$store.state.selectedArray
+      downloadFromLocalities({
+        localities: this.$store.state.localitiesWrapper.map(e => e.chosenLocality),
+        selectedArray: this.$store.state.selectedArrayToTable}
       ).then((value) => {
         value;
       });
       this.loading = false;
-    },
-    lol(){
-      console.log("opening");
     }
   },
   created(){
-this.lol();    
+    console.log(this.selectedFormat);
+  },
+  computed: {
+    localitiesWrapper: {
+      get() {
+        return this.$store.state.localitiesWrapper;
+      }
+    }
   }
 };
 </script>

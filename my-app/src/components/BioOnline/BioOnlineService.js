@@ -1,3 +1,6 @@
+const querystring = require('querystring');
+
+
 export async function searchAnimal(data) {
   const url = `/api/search-animal?genus=${data.genus}&species=${data.species}&commonName=${data.commonName}`;
   console.log(url);
@@ -26,8 +29,9 @@ export async function getGeneraSpeciesCommonName() {
   return await response.json();
 }
 
-export async function bioOnlineSearchAnimalsInLocality(payload) {
-  const url = `/api/bio-online-search-species-in-locality?locality=${payload.locality}`;
+export async function bioOnlineSearchAnimalsInLocalities(payload) {
+  let queryString = querystring.stringify(payload);
+  const url = `/api/bio-online-search-species-in-localities?${queryString}`;
   console.log(url);
   const response = await fetch(url, {
     method: "GET",
@@ -67,17 +71,13 @@ export async function downLoadList(something) {
 
   return downloadSheetObjectURL;
 }
-export async function downloadFromLocality(locality, selectedArray) {
-  const searchCriteria = {
-    locality: locality,
-    selectedArray: selectedArray
-  }
-  var url = '/api/download-from-locality';
+export async function downloadFromLocalities(payload) {
+  var url = '/api/download-from-localities';
   console.log(url);
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({searchCriteria: searchCriteria}),
+    body: JSON.stringify({searchCriteria: payload}),
   });
   const downloadSheetBlob = await response.blob();
   const downloadSheetObjectURL = URL.createObjectURL(downloadSheetBlob);
@@ -88,28 +88,3 @@ export async function downloadFromLocality(locality, selectedArray) {
   document.body.appendChild(link);
   link.click();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var serialize = function(obj, prefix) {
-//   var str = [],
-//     p;
-//   for (p in obj) {
-//       var k = prefix ? prefix + "[" + p + "]" : p,
-//         v = obj[p];
-//       str.push((v !== null && typeof v === "object") ?
-//         serialize(v, k) :
-//         encodeURIComponent(k) + "=" + encodeURIComponent(v));
-//   }
-//   return str.join("&");
-// }

@@ -2,12 +2,12 @@ const ExcelJS = require('exceljs');
 
 exports.makeSheet =  async (response, params, animalRows) =>{
   const selectedArray = params.selectedArray;
-  const locality = params.locality;
+  const localities = params.localities;
     let workbook = new ExcelJS.Workbook();
-    let worksheet = workbook.addWorksheet(locality);
+    let worksheet = workbook.addWorksheet("inventário");
     var fileName = 'relatorio.xls';
 
-    console.log(locality, selectedArray);
+    console.log(localities, selectedArray);
     columns = [];
     for(var i = 0; i < selectedArray.length; i++){
       columns.push(

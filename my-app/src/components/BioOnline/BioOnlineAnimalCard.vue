@@ -25,10 +25,6 @@
      ></b-table>
         </b-card>
       </template>
-     
-     
-     
-     
      </b-table>
   </b-card>
     <div>
@@ -68,7 +64,7 @@ this.transformAnimalDictIntoRows();
             }
         },
         rowClass(item) {
-        if (!this.$store.state.selectedArray.includes(item.key)){
+        if (!this.$store.state.selectedArrayToCards.includes(item.key)){
             return 'd-none'
         }
       },

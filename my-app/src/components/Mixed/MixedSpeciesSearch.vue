@@ -1,48 +1,67 @@
 <template>
-<div>
-        <form>
-            <div >
-                <div>
-                    <b-form-select v-model="chosenGenus" :options="genera" @change="update"></b-form-select>
-                    <b-form-select v-model="chosenSpecies" :options="speciesList" @change="update"></b-form-select>
-                    Ou
-                    <b-form-select v-model="chosenCommonName" :options="commonNames"></b-form-select>
-                </div>
-                    <b-spinner
+  <div>
+    <form>
+      <div>
+        <div>
+          <b-form-select
+            v-model="chosenGenus"
+            :options="genera"
+            @change="update"
+          ></b-form-select>
+          <b-form-select
+            v-model="chosenSpecies"
+            :options="speciesList"
+            @change="update"
+          ></b-form-select>
+          Ou
+          <b-form-select
+            v-model="chosenCommonName"
+            :options="commonNames"
+          ></b-form-select>
+        </div>
+        <b-spinner
           v-show="loadingSelectables"
           small
           variant="primary"
           label="Spinning"
         ></b-spinner>
-            </div>
+      </div>
 
-          <div class="mb-4 mt-2">
-            <b-button
-            @click='mixedSearch()'
-            variant="primary" class="mr-2" 
-            :disabled="chosenGenus == '' && chosenCommonName == ''">
-                <span v-show="!loading">Pesquisar</span>
-                <b-spinner v-show="loading" small variant="primary" label="Spinning"></b-spinner>
-                <span v-show="loading">Aguarde, carregando</span>
-            </b-button>
-            
-            <b-button
-            @click='clearForms()'
-            variant="outline-secondary" class="mr-2">
-                <span v-show="!loading">Limpar campos</span>
-            </b-button>
-            </div>
-        </form>
-    </div>
+      <div class="mb-4 mt-2">
+        <b-button
+          @click="mixedSearch()"
+          variant="primary"
+          class="mr-2"
+          :disabled="chosenGenus == '' && chosenCommonName == ''"
+        >
+          <span v-show="!loading">Pesquisar</span>
+          <b-spinner
+            v-show="loading"
+            small
+            variant="primary"
+            label="Spinning"
+          ></b-spinner>
+          <span v-show="loading">Aguarde, carregando</span>
+        </b-button>
+
+        <b-button
+          @click="clearForms()"
+          variant="outline-secondary"
+          class="mr-2"
+        >
+          <span v-show="!loading">Limpar campos</span>
+        </b-button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
 import { mixedSearch } from "./MixedService";
-import { getGeneraSpeciesCommonName,  } from "../BioOnline/BioOnlineService";
+import { getGeneraSpeciesCommonName } from "../BioOnline/BioOnlineService";
 
 export default {
-  components: {
-  },
+  components: {},
   data() {
     return {
       genus: null,
@@ -86,10 +105,13 @@ export default {
 
         const genera = Object.keys(value.generaSpeciesDict);
         for (let i = 0; i < genera.length; i++) {
-          this.genera.push({ text: genera[i], value: genera[i]  });
+          this.genera.push({ text: genera[i], value: genera[i] });
         }
         for (let i = 0; i < value.commonNames.length; i++) {
-          this.commonNames.push({ text: value.commonNames[i], value: value.commonNames[i] });
+          this.commonNames.push({
+            text: value.commonNames[i],
+            value: value.commonNames[i],
+          });
         }
 
         this.loadingSelectables = false;
@@ -103,7 +125,7 @@ export default {
       this.chosenGenus = "";
       this.chosenSpecies = "";
       this.chosenCommonName = "";
-      this.speciesList =  [{ value: "", text: "Espécie" }];
+      this.speciesList = [{ value: "", text: "Espécie" }];
       this.$store.state.animalRows = [];
     },
   },

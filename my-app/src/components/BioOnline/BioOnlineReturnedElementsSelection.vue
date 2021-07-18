@@ -10,10 +10,11 @@
         ></b-spinner>
             <b-tab title="Básico" active>
               <b-form-checkbox-group
-                v-model="selectedArray"
+                :value="selectedArrayToCards"
                 :options="completeOptions['Básico']"
                 :aria-describedby="ariaDescribedby"
-                :checked="selectedArray"
+                :checked="selectedArrayToCards"
+                @change="update(selectedArrayToCards, $event)"
                 ></b-form-checkbox-group>
               </b-tab>
 
@@ -25,15 +26,16 @@
                 @change="toggleAll(allSelected[category],category)"
                 >{{ category }}</b-form-checkbox>
             <b-form-checkbox-group
-                v-model="selectedArray"
+                :value="selectedArrayToCards"
                 :options="completeOptions[category]"
                 :aria-describedby="ariaDescribedby"
-                :checked="selectedArray"></b-form-checkbox-group>
+                :checked="selectedArrayToCards"
+                @change="update(selectedArrayToCards, $event)"
+                ></b-form-checkbox-group>
               </b-card>
             </b-tab>
           </b-form-group>
-          </b-tabs>
-          
+          </b-tabs>   
         </div>
 </template>
 
@@ -68,12 +70,23 @@ export default {
                     })
     },
     toggleAll(checked, category ){
-      this.$store.state.selectedArray = this.$store.state.selectedArray.filter(n => !this.completeOptions[category].includes(n))
+      this.$store.state.selectedArrayToCards = this.$store.state.selectedArrayToCards.filter(n => !this.completeOptions[category].includes(n))
       if(!checked){
         for(var i = 0; i < this.completeOptions[category].length; i++){
-          this.$store.state.selectedArray.push(this.completeOptions[category][i]);
+          this.$store.state.selectedArrayToCards.push(this.completeOptions[category][i]);
         }
       }
+      this.update("?", this.$store.state.selectedArrayToCards);
+    },
+    update(item, event){
+      this.$store.state.selectedArrayToCards = event;
+      let selectionToCards = this.$store.state.selectedArrayToCards;
+      let selectionToTable = selectionToCards.filter(e => e != "Observações registradas");
+      if(selectionToCards.includes("Observações registradas")){
+        selectionToTable.push(...this.$store.state.localitiesWrapper.map(w => w.chosenLocality));
+      }
+      this.$store.commit("updateSelectedArrayToTable", selectionToTable);
+      console.log("updating")
     }
   },
   created(){
@@ -81,14 +94,21 @@ export default {
     this.loadingColumns = false;
   },
   computed:{
-    selectedArray:{
+    selectedArrayToCards:{
       get () {
-      return this.$store.state.selectedArray;
+      return this.$store.state.selectedArrayToCards;
+      },
+      set (value) {
+        this.$store.commit('updateSelectedArrayToCards', value)
+      }
     },
-    set (value) {
-      this.$store.commit('updateSelectedArray', value)
-    }
-
+    selectedArrayToTable:{
+      get () {
+      return this.$store.state.selectedArrayToTable;
+      },
+      set (value) {
+        this.$store.commit('updateSelectedArrayToTable', value)
+      }
     }
   }
 }

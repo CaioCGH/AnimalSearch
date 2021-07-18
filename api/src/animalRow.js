@@ -1,4 +1,4 @@
-var createAnimalRows = function(headerRow, rows){
+exports.createAnimalRows = function(headerRow, rows){
     animalRows = [];
     for(var i = 0 ; i < rows.length; i++){
         animalRows.push(createAnimalRow(headerRow, rows[i]));
@@ -29,7 +29,7 @@ var createAnimalRow = function(headerRow, row){
     return animalRow;
 }
 
-var createHeaderRow = function(rows){
+exports.createHeaderRow = function(rows){
     headerRow = [];
     for(var i = 0; i < rows.length; i++){
         if(typeof rows[3][i] === "string"){
@@ -41,5 +41,11 @@ var createHeaderRow = function(rows){
     return headerRow;
 }
 
-
-module.exports = {createHeaderRow, createAnimalRows};
+exports.addObservationDetailColumn = function(rows, localities){
+    for(let i = 0; i < rows.length; i++){
+        for(let j = 0; j < localities.length; j++){
+            rows[i][localities[j]] = rows[i]['Observações registradas'][localities[j]];
+        }
+    }
+    return rows;
+}

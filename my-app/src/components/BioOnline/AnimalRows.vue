@@ -24,9 +24,6 @@ export default {
     return {};
   },
   methods: {
-    shouldDisplay(key) {
-      return this.$props.selectedArray.includes(key);
-    },
   },
   computed: {
     animalRows: {

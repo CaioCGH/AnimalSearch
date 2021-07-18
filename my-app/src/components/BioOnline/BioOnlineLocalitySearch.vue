@@ -1,19 +1,35 @@
 <template>
   <div>
-    <form>
+    <form v-for="localityWrapper in localitiesWrapper" :key="localityWrapper.id">
       <b-form-select
-        v-model="chosenLocality"
+        v-model="localityWrapper.chosenLocality"
         :options="localities"
         @change="update"
       ></b-form-select>
     </form>
-
     <div class="mb-4 mt-2" >
+    <b-button
+        @click="localitiesWrapper.push({chosenLocality: ''})"
+        variant="success"
+        class="mr-2"
+      >
+        <span>Adicionar mais um local</span>
+      </b-button>
       <b-button
-        @click="bioOnlineSearchAnimalsInLocality()"
+        @click="localitiesWrapper.pop(); update()"
+        variant="danger"
+        class="mr-2"
+      >
+        <span v-show="!loading">Remover local</span>
+      </b-button>
+</div>
+    <div class="mb-4 mt-2" >
+      
+      <b-button
+        @click="bioOnlineSearchAnimalsInLocalities()"
         variant="primary"
         class="mr-2"
-        :disabled="chosenLocality == ''"
+        :disabled="localitiesWrapper.length < 1 || localitiesWrapper[0].chosenLocality == ''"
       >
         <span v-show="!loading">Pesquisar</span>
         <b-spinner
@@ -26,9 +42,9 @@
       </b-button>
 
       <b-button
-        v-b-modal="'downloadListModal'"
+        v-b-modal="'modalId'"
         class="mr-2"
-        :disabled="chosenLocality == ''"
+        :disabled="localitiesWrapper.length < 1 || localitiesWrapper[0].chosenLocality == ''"
       >
         <span v-show="!loading">Baixar lista</span>
         <b-spinner
@@ -44,43 +60,45 @@
         <span v-show="!loading">Limpar campos</span>
       </b-button>
     </div>
-    <SelectDataFormat :locality="chosenLocality" />
   </div>
 </template>
 
 <script>
 import {
-  bioOnlineSearchAnimalsInLocality,
+  bioOnlineSearchAnimalsInLocalities,
   getBioOnlineLocalities,
   downLoadList,
 } from "./BioOnlineService";
-import SelectDataFormat from "./SelectDataFormat.vue";
+
 
 export default {
   components: {
-    SelectDataFormat,
   },
   data() {
     return {
       localities: [{ value: "", text: "Localidade" }],
-      chosenLocality: "",
       result: false,
       loading: false,
       loadingDownload: false,
+      timesOpened: 0
     };
   },
   created() {
     this.feedBioOnlineLocalities();
   },
   methods: {
-    bioOnlineSearchAnimalsInLocality() {
+    bioOnlineSearchAnimalsInLocalities() {
       this.loading = true;
-      console.log(this.chosenLocality.trim());
-      console.log(this.chosenLocality);
+      var chosenLocalities = [];
+      for(let i = 0; i < this.localitiesWrapper.length; i++){
+chosenLocalities.push(this.localitiesWrapper[i].chosenLocality);
+      }
       const payload = {
-        locality: this.chosenLocality.trim(),
+        localities: chosenLocalities,
       };
-      bioOnlineSearchAnimalsInLocality(payload).then((value) => {
+        console.log("payload")
+        console.log(payload)
+      bioOnlineSearchAnimalsInLocalities(payload).then((value) => {
         this.animalRows = value;
         this.result = true;
         this.loading = false;
@@ -109,11 +127,12 @@ export default {
       });
     },
     clearForms() {
-      this.chosenLocality = "";
+      this.$store.state.localitiesWrapper = [{chosenLocality: ''}];
       this.$store.commit("updateAnimalRows", []);
     },
     update() {
-      console.log("updating..." + this.chosenLocality);
+      this.$store.commit("updateSelectedArrayOnLocalities", this.localities);
+      console.log("updating...");
     },
   },
   computed: {
@@ -131,6 +150,14 @@ export default {
       },
       set(value) {
         this.$store.commit("updateAnimalRows", value);
+      },
+    },
+    localitiesWrapper: {
+      get() {
+        return this.$store.state.localitiesWrapper;
+      },
+      set(value) {
+        this.$store.commit("updateLocalitiesWrapper", value);
       },
     },
   },

@@ -61,10 +61,16 @@ app.get('/api/get-genera-species-commonnames', async(req, res) => {
   res.json(generaSpeciesCommonNames); 
 });
 
-app.get('/api/bio-online-search-species-in-locality', async(req, res) => {
-  const locality = req.query.locality;
-  const observedInLocalityRows = searchTools.getBioOnlineSpeciesInLocality(rows, locality);
-  const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
+app.get('/api/bio-online-search-species-in-localities', async(req, res) => {
+  var localities = [];
+  if(Array.isArray(req.query.localities)){
+    localities = req.query.localities;
+  }else{
+    localities.push(req.query.localities);
+  }
+  const observedInLocalitiesRows = searchTools.getBioOnlineSpeciesInLocalities(rows, localities);
+  var animalRows = animalRow.createAnimalRows(headerRow, observedInLocalitiesRows);
+  animalRows = animalRow.addObservationDetailColumn(animalRows, localities);
   res.json(animalRows); 
 });
 
@@ -104,11 +110,12 @@ app.post('/api/inaturalist-search', async(req, res) => {
   });
 });
 
-app.post("/api/download-from-locality", function (req, res) {
+app.post("/api/download-from-localities", function (req, res) {
   console.log(req.body);
-  const locality = req.body.searchCriteria.locality;
-  const observedInLocalityRows = searchTools.getBioOnlineSpeciesInLocality(rows, locality);
-  const animalRows = animalRow.createAnimalRows(headerRow, observedInLocalityRows);
+  const localities = req.body.searchCriteria.localities;
+  const observedInLocalitiesRows = searchTools.getBioOnlineSpeciesInLocalities(rows, localities);
+  var animalRows = animalRow.createAnimalRows(headerRow, observedInLocalitiesRows);
+  animalRows = animalRow.addObservationDetailColumn(animalRows, localities);
   downloadableDataMaker.makeSheet(res, req.body.searchCriteria, animalRows);
 })
 

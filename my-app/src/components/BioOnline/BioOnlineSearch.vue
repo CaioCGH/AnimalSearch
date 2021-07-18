@@ -4,8 +4,8 @@
     <BioOnlineReturnedElementsSelection />
     <ResultFormatSelector />
     <b-tabs   content-class="mt-4">
-        <b-tab title="Busca espécie" active><BioOnlineSpeciesSearch/></b-tab>
-        <b-tab title="Busca local"><BioOnlineLocalitySearch /></b-tab>
+        <b-tab title="Busca espécie" active><BioOnlineSpeciesSearch/><SelectDataFormat /></b-tab>
+        <b-tab title="Busca local" ><BioOnlineLocalitySearch /></b-tab>
     </b-tabs>
     <AnimalRows />
     <BioOnlineTableRows  />
@@ -22,6 +22,8 @@ import AnimalRows from './AnimalRows.vue'
 import BioOnlineTableRows from './BioOnlineTableRows.vue'
 import BioOnlineReturnedElementsSelection from './BioOnlineReturnedElementsSelection.vue'
 import ResultFormatSelector from './ResultFormatSelector.vue'
+import SelectDataFormat from "./SelectDataFormat.vue";
+
 
 
 export default {
@@ -33,7 +35,9 @@ export default {
       BioOnlineReturnedElementsSelection,
       AnimalRows,
       BioOnlineTableRows,
-      ResultFormatSelector
+      ResultFormatSelector,
+          SelectDataFormat,
+
   },
   data(){
     return{
