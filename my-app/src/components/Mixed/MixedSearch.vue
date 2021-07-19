@@ -4,7 +4,7 @@
     <BioOnlineReturnedElementsSelection />
     <b-tabs   content-class="mt-4">
         <b-tab title="Busca espécie" active><MixedSpeciesSearch/></b-tab>
-        <b-tab title="Busca local"><BioOnlineLocalitySearch /></b-tab>
+        <b-tab title="Busca local" disabled><BioOnlineLocalitySearch /></b-tab>
     </b-tabs>
     <MixedAnimalRows />
   </div>
