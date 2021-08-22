@@ -1,9 +1,8 @@
 <template>
-  <div><!-- por agum motivo está abrindo o modal duas vezes, a primeira sem props --> 
+  <div>
     <b-modal id="modalId">
       <b-container fluid>
         Selecione o formato do arquivo para baixar:
-        <!-- {{this}} -->
         <div>
           <b-form-select
             v-model="selectedFormat"
